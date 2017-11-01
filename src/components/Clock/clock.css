@@ -1,0 +1,25 @@
+:root {
+  --clock-size: 100px;
+  --clock-border-width: 1px;
+  --clock-border-color: #EAEAEA;
+  --clock-backgound-color: #000;
+}
+
+.clock {
+  position: relative;
+  width: var(--clock-size);
+  height: var(--clock-size);
+  border: var(--clock-border-width) solid var(--clock-border-color);
+  border-radius: 50%;
+  background-color: var(--clock-backgound-color);
+}
+.clock_needle {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
+.clock_needleRotate {
+  position: absolute;
+  top: calc(50% - (10px /2));
+  left: calc(50% - (10px /2));
+}

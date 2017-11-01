@@ -1,0 +1,10 @@
+:root {
+  --needle_width: 10px;
+  --needle_background_color: #FFF;
+}
+
+.needle {
+  width: var(--needle_width);
+  border-radius: var(--needle_width);
+  background-color:var(--needle_background_color);
+}
