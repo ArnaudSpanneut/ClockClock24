@@ -1,7 +1,5 @@
 :root {
   --clock-size: 100px;
-  --clock-border-width: 1px;
-  --clock-border-color: #EAEAEA;
   --clock-backgound-color: #000;
 }
 
@@ -9,9 +7,9 @@
   position: relative;
   width: var(--clock-size);
   height: var(--clock-size);
-  border: var(--clock-border-width) solid var(--clock-border-color);
   border-radius: 50%;
   background-color: var(--clock-backgound-color);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, .30);
 }
 .clock_needle {
   position: absolute;

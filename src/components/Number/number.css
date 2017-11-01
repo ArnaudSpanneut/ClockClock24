@@ -1,0 +1,12 @@
+:root {
+  --clocksNumber_line_size: 2px;
+}
+
+.number_line {
+  width: var(--clocksNumber_line_size);
+  display: flex;
+}
+.number_line_clock {
+  flex: 1;
+  padding: 2px;
+}

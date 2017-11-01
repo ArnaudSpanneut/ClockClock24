@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 
-import Clock from './components/Clock/Clock';
+import ClockClock24 from './components/ClockClock24/ClockClock24';
 
 ReactDOM.render(
-  <Clock hours="3" minutes="30" />,
+  <ClockClock24/>,
   document.getElementById('root')
 );
