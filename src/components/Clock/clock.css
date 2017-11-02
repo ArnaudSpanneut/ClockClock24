@@ -15,6 +15,7 @@
   position: absolute;
   width: 100px;
   height: 100px;
+  transition: transform 10s;
 }
 .clock_needleRotate {
   position: absolute;

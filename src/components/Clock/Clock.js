@@ -15,12 +15,14 @@ export default class Clock extends React.Component {
   render() {
     const { hours, minutes } = this.props;
     const minutesDivide = minutes / 5;
+    const hoursDegree = this.calculateRotation(hours);
+    const minutesDegree = this.calculateRotation(minutesDivide);
     const style = {
       hours: {
-        transform: `rotate(${this.calculateRotation(hours)}deg)`,
+        transform: `rotate(${hoursDegree + 360}deg)`,
       },
       minutes: {
-        transform: `rotate(${this.calculateRotation(minutesDivide)}deg)`,
+        transform: `rotate(${minutesDegree - 360}deg)`,
       }
     }
 
