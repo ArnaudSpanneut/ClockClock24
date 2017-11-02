@@ -21,7 +21,8 @@ export default class Clock extends React.Component {
       width: size,
       height: size,
     };
-    const needleSize = size / 2;
+    const needleWidth = size / 10;
+    const needleHeight = size / 2;
     const style = {
       hours: Object.assign({
         transform: `rotate(${hoursDegree + 360}deg)`,
@@ -29,18 +30,22 @@ export default class Clock extends React.Component {
       minutes: Object.assign({
         transform: `rotate(${minutesDegree - 360}deg)`,
       }, clockSizeStyle),
-    }
+      needleRotate: {
+        top: `calc(50% - (${needleWidth}px / 2))`,
+        left: `calc(50% - (${needleWidth}px / 2))`,
+      },
+    };
 
     return (
       <div className="clock" style={clockSizeStyle}>
         <div className="clock_needle" style={style.hours}>
-          <div className="clock_needleRotate">
-            <Needle height={needleSize - 2}/>
+          <div className="clock_needleRotate" style={style.needleRotate}>
+            <Needle height={needleHeight - 2} width={needleWidth} />
           </div>
         </div>
         <div className="clock_needle" style={style.minutes}>
-          <div className="clock_needleRotate">
-            <Needle height={needleSize}/>
+          <div className="clock_needleRotate" style={style.needleRotate}>
+            <Needle height={needleHeight} width={needleWidth} />
           </div>
         </div>
       </div>

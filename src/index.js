@@ -4,7 +4,7 @@ import './index.css';
 
 import ClockClock24 from './components/ClockClock24/ClockClock24';
 
-const CLOCK_SIZE = 100;
+const CLOCK_SIZE = 150;
 const CLOCK_PADDING = 2;
 
 const totalClockSize = CLOCK_SIZE + (CLOCK_PADDING * 2);
