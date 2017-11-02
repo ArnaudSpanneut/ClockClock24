@@ -42,7 +42,7 @@ export default class ClockClock24 extends React.Component {
 
     return <div className="clockclock24">
       { time
-          .map((number, index) => <div className="clockclock24_number" key="index">
+          .map((number, index) => <div className="clockclock24_number" key={index}>
             <Number number={number} />
           </div>)
       }
