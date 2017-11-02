@@ -13,7 +13,7 @@ export default class Clock extends React.Component {
     return START_DEGREE + (ONE_HOUR_DEGREE * number);
   }
   render() {
-    const { hours, minutes, size } = this.props;
+    const { hours, minutes, size, animationTime } = this.props;
     const minutesDivide = minutes / 5;
     const hoursDegree = this.calculateRotation(hours);
     const minutesDegree = this.calculateRotation(minutesDivide);
@@ -21,15 +21,18 @@ export default class Clock extends React.Component {
       width: size,
       height: size,
     };
+    const needleTransition = {
+      transitionDuration: `${animationTime}s`,
+    }
     const needleWidth = size / 10;
     const needleHeight = size / 2;
     const style = {
       hours: Object.assign({
         transform: `rotate(${hoursDegree + 360}deg)`,
-      }, clockSizeStyle),
+      }, clockSizeStyle, needleTransition),
       minutes: Object.assign({
         transform: `rotate(${minutesDegree - 360}deg)`,
-      }, clockSizeStyle),
+      }, clockSizeStyle, needleTransition),
       needleRotate: {
         top: `calc(50% - (${needleWidth}px / 2))`,
         left: `calc(50% - (${needleWidth}px / 2))`,

@@ -10,7 +10,7 @@
 }
 .clock_needle {
   position: absolute;
-  transition: transform 10s;
+  transition-name: transform;
 }
 .clock_needleRotate {
   position: absolute;

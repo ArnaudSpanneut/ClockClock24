@@ -7,7 +7,7 @@ export default class Needle extends React.Component {
     const style = {
       height,
       width,
-      'border-radius': width,
+      borderRadius: width,
     };
 
     return (

@@ -34,6 +34,7 @@ export default class ClockClock24 extends React.Component {
       times.reduce((totalTime, time) => totalTime += time.timeout, 0) :
       0;
     const nextTimeout = ONE_MINUTES_IN_MILLI - secondsInMilli - customTimeout;
+    // const nextTimeout = 10000 - customTimeout;
 
     times = times
       .concat([{ timeout: nextTimeout }])
@@ -62,9 +63,10 @@ export default class ClockClock24 extends React.Component {
   }
   getNextCustom() {
     const { customs_available, customs_used_index } = this.state;
+    const { animationTime } = this.props;
     let newCustomUsedIndex = customs_used_index + 1;
     let customName = null;
-    const customTimeout = 11 * ONE_MILLI;
+    const customTimeout = (animationTime + 1) * ONE_MILLI;
 
     if(newCustomUsedIndex === customs_available.length) {
       newCustomUsedIndex = 0;
@@ -92,13 +94,15 @@ export default class ClockClock24 extends React.Component {
     return timeArray;
   }
   render() {
-    const { clockSize } = this.props;
+    const { clockSize, animationTime } = this.props;
     const { time } = this.state;
 
     return <div className="clockclock24">
       { time
           .map((number, index) => <div className="clockclock24_number" key={index}>
-            <Number number={number} clockSize={clockSize} />
+            <Number number={number}
+              clockSize={clockSize}
+              animationTime={animationTime} />
           </div>)
       }
     </div>;
