@@ -1,5 +1,6 @@
 const DEACTIVATE_CLOCKS = { hours: 7.5, minutes: 37.5 };
 const VERTICAL_LINE = { hours: 0, minutes: 30 };
+const HORIZONTAL_LINE = { hours: 3, minutes: 45 };
 const OBLIQUE_LINE = { hours: 1.5, minutes: 37.5 };
 const TOP = { hours: 0, minutes: 0 };
 const RIGHT = { hours: 3, minutes: 15 };
@@ -60,10 +61,30 @@ const NUMBERS = [
     [ANGLE_TOP_RIGHT, VERTICAL_LINE],
     [RIGHT, ANGLE_TOP_LEFT],
   ] },
-  { lines: [ // SHAPE
+  { lines: [ // OBLIQUE
     [OBLIQUE_LINE, OBLIQUE_LINE],
     [OBLIQUE_LINE, OBLIQUE_LINE],
     [OBLIQUE_LINE, OBLIQUE_LINE],
+  ] },
+  { lines: [ // SQUARE 1
+    [VERTICAL_LINE, ANGLE_BOTTOM_RIGHT],
+    [VERTICAL_LINE, VERTICAL_LINE],
+    [VERTICAL_LINE, VERTICAL_LINE],
+  ] },
+  { lines: [ // SQUARE 2
+    [HORIZONTAL_LINE, HORIZONTAL_LINE],
+    [ANGLE_BOTTOM_RIGHT, HORIZONTAL_LINE],
+    [VERTICAL_LINE, ANGLE_BOTTOM_RIGHT],
+  ] },
+  { lines: [ // SQUARE 3
+    [HORIZONTAL_LINE, HORIZONTAL_LINE],
+    [HORIZONTAL_LINE, ANGLE_BOTTOM_LEFT],
+    [ANGLE_BOTTOM_LEFT, VERTICAL_LINE],
+  ] },
+  { lines: [ // SQUARE 4
+    [ANGLE_BOTTOM_LEFT, VERTICAL_LINE],
+    [VERTICAL_LINE, VERTICAL_LINE],
+    [VERTICAL_LINE, VERTICAL_LINE],
   ] },
 ]
 

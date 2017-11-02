@@ -13,29 +13,34 @@ export default class Clock extends React.Component {
     return START_DEGREE + (ONE_HOUR_DEGREE * number);
   }
   render() {
-    const { hours, minutes } = this.props;
+    const { hours, minutes, size } = this.props;
     const minutesDivide = minutes / 5;
     const hoursDegree = this.calculateRotation(hours);
     const minutesDegree = this.calculateRotation(minutesDivide);
+    const clockSizeStyle = {
+      width: size,
+      height: size,
+    };
+    const needleSize = size / 2;
     const style = {
-      hours: {
+      hours: Object.assign({
         transform: `rotate(${hoursDegree + 360}deg)`,
-      },
-      minutes: {
+      }, clockSizeStyle),
+      minutes: Object.assign({
         transform: `rotate(${minutesDegree - 360}deg)`,
-      }
+      }, clockSizeStyle),
     }
 
     return (
-      <div className="clock">
+      <div className="clock" style={clockSizeStyle}>
         <div className="clock_needle" style={style.hours}>
           <div className="clock_needleRotate">
-            <Needle height="48"/>
+            <Needle height={needleSize - 2}/>
           </div>
         </div>
         <div className="clock_needle" style={style.minutes}>
           <div className="clock_needleRotate">
-            <Needle height="50"/>
+            <Needle height={needleSize}/>
           </div>
         </div>
       </div>

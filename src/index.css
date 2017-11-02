@@ -2,8 +2,5 @@ html {
   background-color: #000;
 }
 .container {
-  width: 830px;
   position: absolute;
-  top: calc(50% - (312px / 2));
-  right: calc(50% - (830px / 2));
 }

@@ -18,9 +18,14 @@ export default class Number extends React.Component {
       </div>);
   }
   getClocks(clocks) {
+    const { clockSize } = this.props;
+
     return clocks
       .map((clock, index) => <div className="number_line_clock" key={index}>
-        <Clock hours={clock.hours} minutes={clock.minutes} />
+        <Clock
+          size={clockSize}
+          hours={clock.hours}
+          minutes={clock.minutes} />
       </div>)
   }
   render() {
