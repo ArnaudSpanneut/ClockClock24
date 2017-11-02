@@ -6,6 +6,7 @@ import Number from './../Number/Number';
 const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60000;
 const CUSTOMS_TIMES = {
+  lol: [15, 16, 17, 18],
   oblique: [10, 10, 10, 10],
   square: [11, 12, 13, 14],
 };
