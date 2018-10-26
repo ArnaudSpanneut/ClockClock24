@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import ClockClock24 from './components/ClockClock24/ClockClock24';
+import config from './config';
 
-const ANIMATION_TIME = 5;
-const CLOCK_SIZE = 150;
-const CLOCK_PADDING = 2;
-
-const totalClockSize = CLOCK_SIZE + (CLOCK_PADDING * 2);
+const totalClockSize = config.CLOCK_SIZE + (config.CLOCK_PADDING * 2);
 const height = totalClockSize * 3;
 const width = totalClockSize * 8;
 const clockStyle = {
@@ -19,8 +16,11 @@ const clockStyle = {
 }
 
 ReactDOM.render(
-  <div className="container" style={clockStyle}>
-    <ClockClock24 clockSize={CLOCK_SIZE} animationTime={ANIMATION_TIME} />
+  <div className="container"
+    style={clockStyle}>
+    <ClockClock24
+      clockSize={config.CLOCK_SIZE}
+      animationTime={config.ANIMATION_TIME} />
   </div>,
   document.getElementById('root')
 );

@@ -4,3 +4,11 @@
 .clockclock24_number {
   flex: 1;
 }
+
+.clockclock24_number_line {
+  display: flex;
+}
+.clockclock24_number_line_clock {
+  flex: 1;
+  padding: 2px;
+}

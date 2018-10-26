@@ -1,109 +1,103 @@
 import React from 'react';
 import './clockClock24.css';
+import NUMBERS from '../../constants/numbers';
+import SHAPES from '../../constants/shapes';
 
-import Number from './../Number/Number';
+import { startimeout, runSequences, getArrTime } from './../../utils';
+import config from './../../config';
+
+import Clock from './../Clock/Clock';
 
 const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60000;
-const CUSTOMS_TIMES = {
-  lol: [15, 16, 17, 18],
-  oblique: [10, 10, 10, 10],
-  square: [11, 12, 13, 14],
-};
 
 export default class ClockClock24 extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      time: this.getTime(),
-      // time: CUSTOMS_TIMES.square,
-      customs_available: Object.keys(CUSTOMS_TIMES),
-      customs_used_index: -1,
+      lines: this.getTimeValues(),
     }
   }
   componentDidMount() {
-    this.playTimes();
+    this.nextTime();
   }
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
-  playTimes(times = []) {
-    const currentTime = new Date(Date.now() + 10000);
+
+  // Component Methods
+  getTimeValues() {
+    return getArrTime()
+      .map(line => NUMBERS[line].lines);
+  }
+  getCustomValues() {
+    const customKeys = Object.keys(SHAPES);
+    const max = customKeys.length - 1;
+    const randomIndex = Math.floor(Math.random() * (max + 1));
+    const customKey = customKeys[randomIndex];
+
+    return SHAPES[customKey]
+      .map(line => line.lines);
+  }
+  /**
+   * Calculate the time remaining between the next time
+   * and start the timeout
+   */
+  nextTime() {
+    const currentTime = new Date(Date.now());
     const secondsInMilli = currentTime.getSeconds() * ONE_MILLI;
-    const customTimeout = (times.length) ?
-      times.reduce((totalTime, time) => totalTime += time.timeout, 0) :
-      0;
-    const nextTimeout = ONE_MINUTES_IN_MILLI - secondsInMilli - customTimeout;
-    // const nextTimeout = 10000 - customTimeout;
+    const timeout = ONE_MINUTES_IN_MILLI - secondsInMilli;
 
-    times = times
-      .concat([{ timeout: nextTimeout }])
-
-    this.startTimeout(times)
-      .then(() => this.timeChange());
+    return startimeout(timeout, () => this.startDancing());
   }
-  timeChange() {
-    const nextCustom = this.getNextCustom();
+  /**
+   * Set the clocks moving to shapes
+   */
+  startDancing() {
+    const sequences = [
+      () => {
+        this.setState({ lines: this.getCustomValues() })
+        return startimeout(config.ANIMATION_TIME);
+      },
+      () => {
+        this.setState({ lines: this.getTimeValues() })
+        return startimeout(config.ANIMATION_TIME);
+      },
+    ];
 
-    this.playTimes([nextCustom]);
+    return runSequences(sequences)
+      .then(() => this.nextTime());
   }
-  startTimeout(times) {
-    return times
-      .reduce((promise, time, index) => {
-        return promise
-          .then(() => {
-            this.setState({ time: time.time || this.getTime() });
 
-            return new Promise((resolve, reject) => {
-              clearTimeout(this.timeout);
-              this.timeout = setTimeout(resolve, time.timeout);
-            });
-          });
-      }, Promise.resolve());
+  // Displaying Components
+  getNumberLines(lines) {
+    return lines
+      .map((clocks, index) => <div className="clockclock24_number_line" key={index}>
+        { this.getClocks(clocks) }
+      </div>);
   }
-  getNextCustom() {
-    const { customs_available, customs_used_index } = this.state;
-    const { animationTime } = this.props;
-    let newCustomUsedIndex = customs_used_index + 1;
-    let customName = null;
-    const customTimeout = (animationTime + 1) * ONE_MILLI;
+  getClocks(clocks) {
+    const { clockSize, animationTime } = this.props;
 
-    if(newCustomUsedIndex === customs_available.length) {
-      newCustomUsedIndex = 0;
-    }
-
-    customName = customs_available[newCustomUsedIndex];
-
-    this.setState({
-      customs_used_index: newCustomUsedIndex,
-    });
-
-    return {
-      time: CUSTOMS_TIMES[customName],
-      timeout: customTimeout,
-    };
-  }
-  getTime() {
-    const time = new Date(Date.now());
-    const timeToString = time.toTimeString()
-      .slice(0, 5)
-      .replace(':', '');
-    const timeArray = Array.apply(null, Array(4))
-      .map((val, index) => timeToString.charAt(index));
-
-    return timeArray;
+    return clocks
+      .map((clock, index) => <div className="clockclock24_number_line_clock" key={index}>
+        <Clock
+          hours={clock.hours}
+          minutes={clock.minutes}
+          size={clockSize}
+          animationTime={animationTime} />
+      </div>)
   }
   render() {
-    const { clockSize, animationTime } = this.props;
-    const { time } = this.state;
+    const { lines } = this.state;
 
     return <div className="clockclock24">
-      { time
-          .map((number, index) => <div className="clockclock24_number" key={index}>
-            <Number number={number}
-              clockSize={clockSize}
-              animationTime={animationTime} />
+      { lines
+          .map((line, index) => <div className="clockclock24_number" key={index}>
+            <div className="number">
+              { this.getNumberLines(line) }
+            </div>
           </div>)
       }
     </div>;

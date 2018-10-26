@@ -1,0 +1,5 @@
+export default {
+  ANIMATION_TIME: 7000,
+  CLOCK_SIZE: 150,
+  CLOCK_PADDING: 2,
+}
