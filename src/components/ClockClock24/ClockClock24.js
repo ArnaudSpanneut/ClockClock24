@@ -59,7 +59,6 @@ export default class ClockClock24 extends React.Component {
    * Set the clocks moving to shapes
    */
   startDancing() {
-    const obliqueLines = SHAPES.oblique;
     const setStateTimeout = (lines) => {
       this.setState({ lines });
       return startimeout(config.ANIMATION_TIME);
@@ -75,19 +74,19 @@ export default class ClockClock24 extends React.Component {
   }
 
   // Displaying Components
-  getNumberLines(lines) {
+  getNumberLines(lines, minutesRandom, hoursRandom) {
     return lines
       .map((clocks, index) => (
         <div
           className="clockclock24_number_line"
           key={index}
         >
-          { this.getClocks(clocks) }
+          { this.getClocks(clocks, minutesRandom, hoursRandom) }
         </div>
       ));
   }
 
-  getClocks(clocks) {
+  getClocks(clocks, minutesRandom, hoursRandom) {
     const { clockSize, animationTime } = this.props;
 
     return clocks
@@ -98,6 +97,8 @@ export default class ClockClock24 extends React.Component {
             minutes={clock.minutes}
             size={clockSize}
             animationTime={animationTime}
+            minutesRandom={minutesRandom}
+            hoursRandom={hoursRandom}
           />
         </div>
       ));
@@ -105,18 +106,23 @@ export default class ClockClock24 extends React.Component {
 
   render() {
     const { lines } = this.state;
+    const hoursRandom = Math.floor(Math.random() * 2) + 1;
+    const minutesRandom = Math.floor(Math.random() * 2) + 1;
 
     return (
-      <div className="clockclock24">
-        { lines
-          .map((line, index) => (
-            <div className="clockclock24_number" key={index}>
-              <div className="number">
-                { this.getNumberLines(line) }
+      <div>
+        <button onClick={() => this.startDancing()}>Test</button>
+        <div className="clockclock24">
+          { lines
+            .map((line, index) => (
+              <div className="clockclock24_number" key={index}>
+                <div className="number">
+                  { this.getNumberLines(line, minutesRandom, hoursRandom) }
+                </div>
               </div>
-            </div>
-          ))
-      }
+            ))
+        }
+        </div>
       </div>
     );
   }

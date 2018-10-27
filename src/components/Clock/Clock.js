@@ -11,7 +11,13 @@ const calculateRotation = (degree) => {
 
 const Clock = (props) => {
   const {
-    hours, minutes, size, animationTime, animationDelay,
+    hours,
+    minutes,
+    size,
+    animationTime,
+    animationDelay,
+    minutesRandom,
+    hoursRandom,
   } = props;
   const hoursDegree = calculateRotation(hours + (360 * hoursRandom));
   const minutesDegree = calculateRotation(minutes + (360 * minutesRandom));
