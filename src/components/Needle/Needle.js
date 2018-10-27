@@ -6,7 +6,8 @@ const Needle = (props) => {
   const style = {
     height,
     width,
-    borderRadius: width,
+    borderTopLeftRadius: width,
+    borderTopRightRadius: width,
   };
 
   return (
