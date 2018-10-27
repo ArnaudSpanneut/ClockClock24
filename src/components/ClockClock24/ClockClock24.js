@@ -14,7 +14,7 @@ const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60000;
 
 const getTimeValues = () => getArrTime()
-  .map(line => NUMBERS[line].lines);
+  .map(line => NUMBERS[line]);
 
 const getCustomValues = () => {
   const customKeys = Object.keys(SHAPES);
@@ -22,8 +22,7 @@ const getCustomValues = () => {
   const randomIndex = Math.floor(Math.random() * (max + 1));
   const customKey = customKeys[randomIndex];
 
-  return SHAPES[customKey]
-    .map(line => line.lines);
+  return SHAPES[customKey];
 };
 
 export default class ClockClock24 extends React.Component {

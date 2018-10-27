@@ -3,22 +3,18 @@ import './clock.css';
 
 import Needle from '../Needle/Needle';
 
-const calculateRotation = (number) => {
+const calculateRotation = (degree) => {
   const START_DEGREE = 180;
-  const TOTAL_DEGREE = 360;
-  const NB_HOURS = 12;
-  const ONE_HOUR_DEGREE = TOTAL_DEGREE / NB_HOURS;
 
-  return START_DEGREE + (ONE_HOUR_DEGREE * number);
-}
+  return START_DEGREE + degree;
+};
 
 const Clock = (props) => {
   const {
     hours, minutes, size, animationTime, animationDelay,
   } = props;
-  const minutesDivide = minutes / 5;
-  const hoursDegree = calculateRotation(hours);
-  const minutesDegree = calculateRotation(minutesDivide);
+  const hoursDegree = calculateRotation(hours + (360 * hoursRandom));
+  const minutesDegree = calculateRotation(minutes + (360 * minutesRandom));
   const clockSizeStyle = {
     width: size,
     height: size,
