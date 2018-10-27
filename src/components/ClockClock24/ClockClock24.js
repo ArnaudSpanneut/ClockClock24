@@ -110,8 +110,11 @@ export default class ClockClock24 extends React.Component {
     const minutesRandom = Math.floor(Math.random() * 2) + 1;
 
     return (
-      <div>
-        <button onClick={() => this.startDancing()}>Test</button>
+      <div className="clockclock24_container">
+        <button className="clockclock24_test_button" type="button" onClick={() => this.startDancing()}>
+          Dance&nbsp;
+          <span role="img" aria-label="dance">💃</span>
+        </button>
         <div className="clockclock24">
           { lines
             .map((line, index) => (
