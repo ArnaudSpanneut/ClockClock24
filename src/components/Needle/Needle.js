@@ -13,6 +13,6 @@ const Needle = (props) => {
   return (
     <div className="needle" style={style} />
   );
-}
+};
 
 export default Needle;
