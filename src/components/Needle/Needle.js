@@ -11,8 +11,7 @@ export default class Needle extends React.Component {
     };
 
     return (
-      <div className="needle" style={ style }>
-      </div>
+      <div className="needle" style={style} />
     );
   }
 }

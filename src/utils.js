@@ -10,10 +10,9 @@ export function startimeout(timeout, cb) {
 }
 export function runSequences(arr) {
   return arr
-    .reduce((promise, func) =>
-      promise
-        .then(() => func())
-      , Promise.resolve());
+    .reduce((promise, func) => promise
+      .then(() => func()),
+    Promise.resolve());
 }
 export function getArrTime() {
   const time = new Date(Date.now());

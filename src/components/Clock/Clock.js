@@ -1,22 +1,25 @@
 import React from 'react';
 import './clock.css';
 
-import Needle from './../Needle/Needle';
+import Needle from '../Needle/Needle';
+
+const calculateRotation = (number) => {
+  const START_DEGREE = 180;
+  const TOTAL_DEGREE = 360;
+  const NB_HOURS = 12;
+  const ONE_HOUR_DEGREE = TOTAL_DEGREE / NB_HOURS;
+
+  return START_DEGREE + (ONE_HOUR_DEGREE * number);
+}
 
 export default class Clock extends React.Component {
-  calculateRotation(number) {
-    const START_DEGREE = 180;
-    const TOTAL_DEGREE = 360;
-    const NB_HOURS = 12;
-    const ONE_HOUR_DEGREE = TOTAL_DEGREE / NB_HOURS;
-
-    return START_DEGREE + (ONE_HOUR_DEGREE * number);
-  }
   render() {
-    const { hours, minutes, size, animationTime, animationDelay } = this.props;
+    const {
+      hours, minutes, size, animationTime, animationDelay,
+    } = this.props;
     const minutesDivide = minutes / 5;
-    const hoursDegree = this.calculateRotation(hours);
-    const minutesDegree = this.calculateRotation(minutesDivide);
+    const hoursDegree = calculateRotation(hours);
+    const minutesDegree = calculateRotation(minutesDivide);
     const clockSizeStyle = {
       width: size,
       height: size,
@@ -24,19 +27,19 @@ export default class Clock extends React.Component {
     const needleTransition = {
       transitionDuration: `${animationTime}ms`,
       transitionDelay: `${animationDelay || 0}ms`,
-    }
+    };
     const needleWidth = size / 11;
     const needleHeight = size / 2;
     const style = {
       hours: {
         transform: `rotate(${hoursDegree + 360}deg)`,
         ...clockSizeStyle,
-        ...needleTransition
+        ...needleTransition,
       },
       minutes: {
         transform: `rotate(${minutesDegree - 360}deg)`,
         ...clockSizeStyle,
-        ...needleTransition
+        ...needleTransition,
       },
       needleRotate: {
         top: `calc(50% - (${needleWidth}px / 2))`,

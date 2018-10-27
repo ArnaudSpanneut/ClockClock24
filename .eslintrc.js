@@ -1,3 +1,8 @@
 module.exports = {
-    "extends": "airbnb"
+    "extends": "airbnb",
+     "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    }
 };

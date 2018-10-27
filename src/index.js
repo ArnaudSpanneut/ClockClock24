@@ -13,14 +13,16 @@ const clockStyle = {
   width,
   top: `calc(50% - (${height}px / 2))`,
   right: `calc(50% - (${width}px / 2))`,
-}
+};
 
 ReactDOM.render(
-  <div className="container"
+  <div
+    className="container"
     style={clockStyle}>
     <ClockClock24
       clockSize={config.CLOCK_SIZE}
-      animationTime={config.ANIMATION_TIME} />
+      animationTime={config.ANIMATION_TIME}
+    />
   </div>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
