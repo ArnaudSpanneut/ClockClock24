@@ -5,8 +5,12 @@ import './clockClock24.css';
 import NUMBERS from '../../constants/numbers';
 import SHAPES from '../../constants/shapes';
 
-import { startimeout, runSequences, getArrTime } from '../../utils';
-import config from '../../config';
+import {
+  startimeout,
+  runSequences,
+  getArrTime,
+  getClockSize,
+} from '../../utils';
 
 import Clock from '../Clock/Clock';
 
@@ -42,10 +46,10 @@ const nextTime = cb => startimeout(getRemainingTime(), cb);
  * Play a set of animations for clocks
  * @param {Function} setStateFunc - React set state function
  */
-const startDancing = (setStateFunc) => {
+const startDancing = (animationTime, setStateFunc) => {
   const setStateTimeout = (lines) => {
     setStateFunc({ lines });
-    return startimeout(config.ANIMATION_TIME);
+    return startimeout(animationTime);
   };
   // Sequence of animations
   const sequences = [
@@ -55,7 +59,7 @@ const startDancing = (setStateFunc) => {
   ];
 
   return runSequences(sequences)
-    .then(() => nextTime(() => startDancing(setStateFunc)));
+    .then(() => nextTime(() => startDancing(animationTime, setStateFunc)));
 };
 // Components
 /**
@@ -129,7 +133,9 @@ export default class ClockClock24 extends Component {
   }
 
   componentDidMount() {
-    nextTime(() => startDancing(state => this.setState(state)));
+    const { animationTime } = this.props;
+
+    nextTime(() => startDancing(animationTime, state => this.setState(state)));
   }
 
   componentWillUnmount() {
@@ -138,14 +144,19 @@ export default class ClockClock24 extends Component {
 
   render() {
     const { lines } = this.state;
-    const { clockSize, animationTime } = this.props;
+    const { clockSize, clockPadding, animationTime } = this.props;
     const hoursRandom = Math.floor(Math.random() * 2) + 1;
     const minutesRandom = Math.floor(Math.random() * 2) + 1;
+    const { height, width } = getClockSize(clockSize, clockPadding);
+    const clockStyle = {
+      height,
+      width,
+    };
 
     return (
       <div className="clockclock24_container">
-        { ButtonTest(() => startDancing(state => this.setState(state))) }
-        <div className="clockclock24">
+        { ButtonTest(() => startDancing(animationTime, state => this.setState(state))) }
+        <div className="clockclock24" style={clockStyle}>
           { lines
             .map(line => Number(line, {
               clockSize, animationTime, minutesRandom, hoursRandom,
@@ -156,3 +167,4 @@ export default class ClockClock24 extends Component {
     );
   }
 }
+

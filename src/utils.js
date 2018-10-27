@@ -22,3 +22,15 @@ export function getArrTime() {
 
   return timeToString.split('');
 }
+export function getClockSize(clockSize, clockPadding) {
+  const totalClockSize = clockSize + (clockPadding * 2);
+  const NB_LINES = 3;
+  const NB_COLUMNS = 8;
+  const height = (totalClockSize * NB_LINES);
+  const width = (totalClockSize * NB_COLUMNS);
+
+  return {
+    height,
+    width,
+  };
+}
