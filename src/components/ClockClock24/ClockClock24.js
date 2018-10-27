@@ -59,15 +59,15 @@ export default class ClockClock24 extends React.Component {
    * Set the clocks moving to shapes
    */
   startDancing() {
+    const obliqueLines = SHAPES.oblique;
+    const setStateTimeout = (lines) => {
+      this.setState({ lines });
+      return startimeout(config.ANIMATION_TIME);
+    };
     const sequences = [
-      () => {
-        this.setState({ lines: getCustomValues() });
-        return startimeout(config.ANIMATION_TIME);
-      },
-      () => {
-        this.setState({ lines: getTimeValues() });
-        return startimeout(config.ANIMATION_TIME);
-      },
+      () => setStateTimeout(getCustomValues()),
+      () => setStateTimeout(SHAPES.oblique),
+      () => setStateTimeout(getTimeValues()),
     ];
 
     return runSequences(sequences)
