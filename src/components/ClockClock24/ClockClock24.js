@@ -37,7 +37,7 @@ const getCustomValues = () => {
  * Get the remaining time before the time change
  */
 const getRemainingTime = () => {
-  const currentTime = new Date(Date.now());
+  const currentTime = new Date();
   const secondsInMilli = currentTime.getSeconds() * ONE_MILLI;
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
 };
@@ -67,7 +67,7 @@ const startDancing = (animationTime, setStateFunc) => {
  * @param {Array} clocks - Set of clocks that compose the line
  * @param { Object } options - Clocks Options
  */
-const Clocks = (clock, options) => (
+const NumberLineClock = (clock, options) => (
   <div className="clockclock24_number_line_clock">
     <Clock
       hours={clock.hours}
@@ -92,7 +92,7 @@ const NumberLines = (lines, options) => (
         key={index}
       >
         {clocks
-          .map(clock => Clocks(clock, options))
+          .map(clock => NumberLineClock(clock, options))
         }
       </div>
     ))
