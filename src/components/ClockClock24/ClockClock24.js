@@ -165,9 +165,11 @@ export default class ClockClock24 extends Component {
       width,
     };
 
+    const onTestClick = () => startDancing(animationTime, state => this.setState(state));
+
     return (
       <div className="clockclock24_container">
-        { ButtonTest(() => startDancing(animationTime, state => this.setState(state))) }
+        { ButtonTest(onTestClick) }
         <div className="clockclock24" style={clockStyle}>
           { lines
             .map(line => Number(line, {
