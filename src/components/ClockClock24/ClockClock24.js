@@ -28,12 +28,10 @@ const getTimeValues = () => getArrTime()
  * @return {Array} Clocks config
  */
 const getCustomValues = () => {
-  const customKeys = Object.keys(SHAPES);
-  const max = customKeys.length - 1;
+  const max = SHAPES.length - 1;
   const randomIndex = Math.floor(Math.random() * (max + 1));
-  const customKey = customKeys[randomIndex];
 
-  return SHAPES[customKey];
+  return SHAPES[randomIndex];
 };
 /**
  * Get the remaining time before the time change
@@ -62,7 +60,7 @@ const startDancing = (animationTime, cb) => {
   // Sequence of animations
   const sequences = [
     () => setStateTimeout(getCustomValues()),
-    () => setStateTimeout(SHAPES.oblique),
+    () => setStateTimeout(SHAPES[0]),
     () => setStateTimeout(getTimeValues()),
   ];
 

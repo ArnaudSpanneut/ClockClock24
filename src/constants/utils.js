@@ -1,5 +1,8 @@
 export default {
-  DEACTIVATE_CLOCKS: { hours: 225, minutes: 225 },
+  DEACTIVATE_TOP_RIGHT: { hours: 45, minutes: 45 },
+  DEACTIVATE_BOTTOM_RIGHT: { hours: 135, minutes: 135 },
+  DEACTIVATE_BOTTOM_LEFT: { hours: 225, minutes: 225 },
+  DEACTIVATE_TOP_LEFT: { hours: 315, minutes: 315 },
   VERTICAL_LINE: { hours: 0, minutes: 180 },
   HORIZONTAL_LINE: { hours: 90, minutes: 270 },
   OBLIQUE_LINE: { hours: 45, minutes: 225 },
