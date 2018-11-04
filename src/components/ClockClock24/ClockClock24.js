@@ -19,11 +19,13 @@ const ONE_MINUTES_IN_MILLI = 60000;
 
 /**
  * Get the clocks config depends of the number
+ * @return {Array} Clocks config
  */
 const getTimeValues = () => getArrTime()
   .map(line => NUMBERS[line]);
 /**
  * Get a random set of configuration to display forms
+ * @return {Array} Clocks config
  */
 const getCustomValues = () => {
   const customKeys = Object.keys(SHAPES);
@@ -35,20 +37,26 @@ const getCustomValues = () => {
 };
 /**
  * Get the remaining time before the time change
+ * @return {Number} Remaining time
  */
 const getRemainingTime = () => {
   const currentTime = new Date();
   const secondsInMilli = currentTime.getSeconds() * ONE_MILLI;
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
 };
-const nextTime = cb => startimeout(getRemainingTime(), cb);
+/**
+ * Waiting for the next minute
+ * @return {Promise} Remaining time
+ */
+const nextTime = () => startimeout(getRemainingTime());
 /**
  * Play a set of animations for clocks
  * @param {Function} setStateFunc - React set state function
+ * @return {Promise} Next startDancing method
  */
-const startDancing = (animationTime, setStateFunc) => {
+const startDancing = (animationTime, cb) => {
   const setStateTimeout = (lines) => {
-    setStateFunc({ lines });
+    cb({ lines });
     return startimeout(animationTime);
   };
   // Sequence of animations
@@ -59,7 +67,8 @@ const startDancing = (animationTime, setStateFunc) => {
   ];
 
   return runSequences(sequences)
-    .then(() => nextTime(() => startDancing(animationTime, setStateFunc)));
+    .then(() => nextTime())
+    .then(() => startDancing(animationTime, cb));
 };
 // Components
 /**
@@ -100,7 +109,7 @@ const NumberLines = (lines, options) => (
 /**
  * The number to display
  * @param {line} lines - Set of line to form the number
- * @param {*} options  - Clocks options
+ * @param {Object} options  - Clocks options
  */
 const Number = (lines, options) => (
   <div className="clockclock24_number">
@@ -135,7 +144,10 @@ export default class ClockClock24 extends Component {
   componentDidMount() {
     const { animationTime } = this.props;
 
-    nextTime(() => startDancing(animationTime, state => this.setState(state)));
+    this.timeout = nextTime()
+      .then(() => startDancing(animationTime, state => this.setState(state)));
+
+    return this.timeout;
   }
 
   componentWillUnmount() {

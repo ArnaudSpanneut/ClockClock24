@@ -1,12 +1,7 @@
-export function startimeout(timeout, cb) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (cb) {
-        cb();
-      }
-      resolve();
-    }, timeout);
-  });
+export function startimeout(timeout) {
+  return new Promise(resolve => setTimeout(() => {
+    resolve();
+  }, timeout));
 }
 export function runSequences(arr) {
   return arr
