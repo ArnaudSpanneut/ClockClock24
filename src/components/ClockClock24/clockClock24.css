@@ -1,7 +1,7 @@
 .clockclock24_test_button {
-  padding: 5px 10px;
+  padding: 10px 20px;
   margin-bottom: 20px;
-  background: #000;
+  background: var(--clock-backgound-color);
   color: #FFF;
   outline: inherit;
   border: none;
@@ -13,8 +13,8 @@
 }
 .clockclock24 {
   display: flex;
-  padding: 20px;
-  background-color: #000;
+  padding: var(--clock-padding);
+  background-color: var(--clock-backgound-color);
   box-shadow: 0px -2px 17px 5px rgba(0, 0, 0, .15);
 }
 .clockclock24_number {
@@ -26,5 +26,5 @@
 }
 .clockclock24_number_line_clock {
   flex: 1;
-  padding: 2px;
+  padding: var(--clock-small-padding);
 }

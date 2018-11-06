@@ -1,16 +1,13 @@
-:root {
-  --clock-backgound-color: #000;
-}
-
 .clock {
   position: relative;
   border-radius: 50%;
   background-color: var(--clock-backgound-color);
-  box-shadow: inset 2px 1px 6px rgba(255, 255, 255, .2);
+  box-shadow: inset -5px 3px 20px 2px rgba(10, 11, 10, .6);
 }
 .clock_needle {
   position: absolute;
   transition-name: transform;
+  transition-timing-function: ease-in-out;
 }
 .clock_needleRotate {
   position: absolute;

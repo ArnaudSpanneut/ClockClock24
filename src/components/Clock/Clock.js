@@ -33,12 +33,12 @@ const Clock = (props) => {
   const needleHeight = size / 2;
   const style = {
     hours: {
-      transform: `rotate(${hoursDegree + 360}deg)`,
+      transform: `rotate(${hoursDegree - 360}deg)`,
       ...clockSizeStyle,
       ...needleTransition,
     },
     minutes: {
-      transform: `rotate(${minutesDegree - 360}deg)`,
+      transform: `rotate(${minutesDegree + 360}deg)`,
       ...clockSizeStyle,
       ...needleTransition,
     },

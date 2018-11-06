@@ -81,6 +81,7 @@ const NumberLineClock = (clock, options) => (
       minutes={clock.minutes}
       size={options.clockSize}
       animationTime={options.animationTime}
+      animationDelay={options.animationDelay}
       minutesRandom={options.minutesRandom}
       hoursRandom={options.hoursRandom}
     />
@@ -171,7 +172,10 @@ export default class ClockClock24 extends Component {
         <div className="clockclock24" style={clockStyle}>
           { lines
             .map(line => Number(line, {
-              clockSize, animationTime, minutesRandom, hoursRandom,
+              clockSize,
+              animationTime,
+              minutesRandom,
+              hoursRandom,
             }))
           }
         </div>
@@ -179,4 +183,3 @@ export default class ClockClock24 extends Component {
     );
   }
 }
-
