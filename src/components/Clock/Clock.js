@@ -29,7 +29,7 @@ const Clock = (props) => {
     transitionDuration: `${animationTime}ms`,
     transitionDelay: `${animationDelay || 0}ms`,
   };
-  const needleWidth = size / 11;
+  const needleWidth = size / 10;
   const needleHeight = size / 2;
   const style = {
     hours: {
@@ -43,8 +43,8 @@ const Clock = (props) => {
       ...needleTransition,
     },
     needleRotate: {
-      top: `calc(50% - (${needleWidth}px / 2))`,
-      left: `calc(50% - (${needleWidth}px / 2))`,
+      top: `calc(50% - ${(needleWidth / 2) - 0.5}px)`,
+      left: `calc(50% - ${(needleWidth / 2) + 0.5}px)`,
     },
   };
 
