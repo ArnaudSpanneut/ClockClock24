@@ -10,6 +10,7 @@ import {
   runSequences,
   getArrTime,
   getClockSize,
+  updateClocksProperties,
 } from '../../utils';
 
 import Clock from '../Clock/Clock';
@@ -50,17 +51,15 @@ const nextTime = () => startimeout(getRemainingTime());
 const computeDelays = (numbers, animationTime) => {
   const delay = 500;
 
-  return numbers
-    .map((number, numberIndex) => number
-      .map(clockLines => clockLines
-        .map((clock, clockIndex) => {
-          const clockDelay = ((numberIndex * 2) + clockIndex) * delay;
-          return {
-            ...clock,
-            animationTime: animationTime - clockDelay,
-            animationDelay: clockDelay,
-          };
-        })));
+  return updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
+    const clockDelay = ((numberIndex * 2) + clockIndex) * delay;
+
+    return {
+      ...clock,
+      animationTime: animationTime - clockDelay,
+      animationDelay: clockDelay,
+    };
+  });
 };
 /**
  * Play a set of animations for clocks

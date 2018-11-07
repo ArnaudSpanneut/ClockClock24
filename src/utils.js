@@ -29,3 +29,7 @@ export function getClockSize(clockSize, clockPadding) {
     width,
   };
 }
+export const updateClocksProperties = (numbers, cb) => numbers
+  .map((number, numberIndex) => number
+    .map((clockLines, clockLinesIndex) => clockLines
+      .map((clock, clockIndex) => cb(clock, clockIndex, clockLinesIndex, numberIndex))));
