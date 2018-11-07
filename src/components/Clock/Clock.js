@@ -16,11 +16,9 @@ const Clock = (props) => {
     size,
     animationTime,
     animationDelay,
-    minutesRandom,
-    hoursRandom,
   } = props;
-  const hoursDegree = calculateRotation(hours + (360 * hoursRandom));
-  const minutesDegree = calculateRotation(minutes + (360 * minutesRandom));
+  const hoursDegree = calculateRotation(hours);
+  const minutesDegree = calculateRotation(minutes);
   const clockSizeStyle = {
     width: size,
     height: size,
@@ -29,7 +27,7 @@ const Clock = (props) => {
     transitionDuration: `${animationTime}ms`,
     transitionDelay: `${animationDelay || 0}ms`,
   };
-  const needleWidth = size / 11;
+  const needleWidth = size / 10;
   const needleHeight = size / 2;
   const style = {
     hours: {
@@ -43,8 +41,8 @@ const Clock = (props) => {
       ...needleTransition,
     },
     needleRotate: {
-      top: `calc(50% - (${needleWidth}px / 2))`,
-      left: `calc(50% - (${needleWidth}px / 2))`,
+      top: `calc(50% - ${(needleWidth / 2) - 0.5}px)`,
+      left: `calc(50% - ${(needleWidth / 2) + 0.5}px)`,
     },
   };
 
@@ -52,7 +50,7 @@ const Clock = (props) => {
     <div className="clock" style={clockSizeStyle}>
       <div className="clock_needle" style={style.hours}>
         <div className="clock_needleRotate" style={style.needleRotate}>
-          <Needle height={needleHeight - 2} width={needleWidth} />
+          <Needle height={needleHeight - 4} width={needleWidth} />
         </div>
       </div>
       <div className="clock_needle" style={style.minutes}>
