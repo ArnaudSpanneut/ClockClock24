@@ -47,19 +47,34 @@ const getRemainingTime = () => {
  * @return {Promise} Remaining time
  */
 const nextTime = () => startimeout(getRemainingTime());
+const computeDelays = (numbers, animationTime) => {
+  const delay = 500;
+
+  return numbers
+    .map((number, numberIndex) => number
+      .map(clockLines => clockLines
+        .map((clock, clockIndex) => {
+          const clockDelay = ((numberIndex * 2) + clockIndex) * delay;
+          return {
+            ...clock,
+            animationTime: animationTime - clockDelay,
+            animationDelay: clockDelay,
+          };
+        })));
+};
 /**
  * Play a set of animations for clocks
  * @param {Function} setStateFunc - React set state function
  * @return {Promise} Next startDancing method
  */
 const startDancing = (animationTime, cb) => {
-  const setStateTimeout = (lines) => {
-    cb({ lines });
+  const setStateTimeout = (numbers) => {
+    cb({ numbers });
     return startimeout(animationTime);
   };
   // Sequence of animations
   const sequences = [
-    () => setStateTimeout(getCustomValues()),
+    () => setStateTimeout(computeDelays(getCustomValues(), animationTime)),
     () => setStateTimeout(SHAPES[0]),
     () => setStateTimeout(getTimeValues()),
   ];
@@ -79,9 +94,9 @@ const NumberLineClock = (clock, options) => (
     <Clock
       hours={clock.hours}
       minutes={clock.minutes}
+      animationTime={clock.animationTime}
+      animationDelay={clock.animationDelay}
       size={options.clockSize}
-      animationTime={options.animationTime}
-      animationDelay={options.animationDelay}
       minutesRandom={options.minutesRandom}
       hoursRandom={options.hoursRandom}
     />
@@ -89,17 +104,17 @@ const NumberLineClock = (clock, options) => (
 );
 /**
  * Display a line of 2 clocks to form a number
- * @param {Array} lines - Number lines (group by 2 clocks)
+ * @param {Array} numberLines - Number lines (group by 2 clocks)
  * @param {Object} options - Clocks options
  */
-const NumberLines = (lines, options) => (
-  lines
-    .map((clocks, index) => (
+const NumberLines = (numberLines, options) => (
+  numberLines
+    .map((numberLine, index) => (
       <div
         className="clockclock24_number_line"
         key={index}
       >
-        {clocks
+        {numberLine
           .map(clock => NumberLineClock(clock, options))
         }
       </div>
@@ -107,13 +122,13 @@ const NumberLines = (lines, options) => (
 );
 /**
  * The number to display
- * @param {line} lines - Set of line to form the number
+ * @param {line} numberLines - Set of line to form the number
  * @param {Object} options  - Clocks options
  */
-const Number = (lines, options) => (
+const Number = (numberLines, options) => (
   <div className="clockclock24_number">
     <div className="number">
-      {NumberLines(lines, options)}
+      {NumberLines(numberLines, options)}
     </div>
   </div>
 );
@@ -136,7 +151,7 @@ export default class ClockClock24 extends Component {
     super(props);
 
     this.state = {
-      lines: getTimeValues(),
+      numbers: getTimeValues(),
     };
   }
 
@@ -154,7 +169,7 @@ export default class ClockClock24 extends Component {
   }
 
   render() {
-    const { lines } = this.state;
+    const { numbers } = this.state;
     const { clockSize, clockPadding, animationTime } = this.props;
     const hoursRandom = Math.floor(Math.random() * 2) + 1;
     const minutesRandom = Math.floor(Math.random() * 2) + 1;
@@ -170,10 +185,9 @@ export default class ClockClock24 extends Component {
       <div className="clockclock24_container">
         { ButtonTest(onTestClick) }
         <div className="clockclock24" style={clockStyle}>
-          { lines
-            .map(line => Number(line, {
+          {numbers
+            .map(number => Number(number, {
               clockSize,
-              animationTime,
               minutesRandom,
               hoursRandom,
             }))
