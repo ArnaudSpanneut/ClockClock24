@@ -17,6 +17,7 @@ import Clock from '../Clock/Clock';
 
 const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60000;
+const ANIMATION_DELAY = 300;
 
 /**
  * Get the clocks config depends of the number
@@ -48,19 +49,16 @@ const getRemainingTime = () => {
  * @return {Promise} Remaining time
  */
 const nextTime = () => startimeout(getRemainingTime());
-const computeDelays = (numbers, animationTime) => {
-  const delay = 500;
-
-  return updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
-    const clockDelay = ((numberIndex * 2) + clockIndex) * delay;
-
+const computeDelays = (numbers, animationTime) => (
+  updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
+    const clockDelay = ((numberIndex * 2) + clockIndex) * ANIMATION_DELAY;
     return {
       ...clock,
       animationTime: animationTime - clockDelay,
       animationDelay: clockDelay,
     };
-  });
-};
+  })
+);
 /**
  * Play a set of animations for clocks
  * @param {Function} setStateFunc - React set state function
