@@ -16,11 +16,9 @@ const Clock = (props) => {
     size,
     animationTime,
     animationDelay,
-    minutesRandom,
-    hoursRandom,
   } = props;
-  const hoursDegree = calculateRotation(hours + (360 * hoursRandom));
-  const minutesDegree = calculateRotation(minutes + (360 * minutesRandom));
+  const hoursDegree = calculateRotation(hours);
+  const minutesDegree = calculateRotation(minutes);
   const clockSizeStyle = {
     width: size,
     height: size,

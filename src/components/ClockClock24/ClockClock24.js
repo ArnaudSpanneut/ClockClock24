@@ -156,8 +156,6 @@ export default class ClockClock24 extends Component {
   render() {
     const { lines } = this.state;
     const { clockSize, clockPadding, animationTime } = this.props;
-    const hoursRandom = Math.floor(Math.random() * 2) + 1;
-    const minutesRandom = Math.floor(Math.random() * 2) + 1;
     const { height, width } = getClockSize(clockSize, clockPadding);
     const clockStyle = {
       height,
@@ -171,12 +169,7 @@ export default class ClockClock24 extends Component {
         { ButtonTest(onTestClick) }
         <div className="clockclock24" style={clockStyle}>
           { lines
-            .map(line => Number(line, {
-              clockSize,
-              animationTime,
-              minutesRandom,
-              hoursRandom,
-            }))
+            .map(line => Number(line, { clockSize, animationTime }))
           }
         </div>
       </div>
