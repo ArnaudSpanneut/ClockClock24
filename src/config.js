@@ -1,5 +1,5 @@
 export default {
   ANIMATION_TIME: 10000,
-  CLOCK_SIZE: 150,
+  CLOCK_SIZE: 130,
   CLOCK_PADDING: 3,
 };
