@@ -33,3 +33,9 @@ export const updateClocksProperties = (numbers, cb) => numbers
   .map((number, numberIndex) => number
     .map((clockLines, clockLinesIndex) => clockLines
       .map((clock, clockIndex) => cb(clock, clockIndex, clockLinesIndex, numberIndex))));
+export const flatArr = arr => arr
+  .reduce((acc, entry) => acc.concat((Array.isArray(entry))
+    ? flatArr(entry)
+    : entry), []);
+export const findClock = (numbers, conditionFunc) => flatArr(numbers)
+  .sort((a, b) => (conditionFunc(a, b) ? 1 : -1))[0];

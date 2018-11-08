@@ -11,6 +11,7 @@ import {
   getArrTime,
   getClockSize,
   updateClocksProperties,
+  findClock,
 } from '../../utils';
 
 import Clock from '../Clock/Clock';
@@ -49,15 +50,18 @@ const getRemainingTime = () => {
  * @return {Promise} Remaining time
  */
 const nextTime = () => startimeout(getRemainingTime());
-const computeDelays = (numbers, animationTime) => (
+const computeDelays = (numbers, animationTime, delay = 0) => (
   updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
-    const clockDelay = ((numberIndex * 2) + clockIndex) * ANIMATION_DELAY;
+    const clockDelay = ((numberIndex * 2) + clockIndex) * delay;
     return {
       ...clock,
-      animationTime: animationTime - clockDelay,
+      animationTime: animationTime + (numbers.length * delay) - clockDelay,
       animationDelay: clockDelay,
     };
   })
+);
+const getMaxAnimationTime = numbers => (
+  findClock(numbers, (a, b) => a.animationTime < b.animationTime).animationTime
 );
 /**
  * Play a set of animations for clocks
@@ -66,12 +70,14 @@ const computeDelays = (numbers, animationTime) => (
  */
 const startDancing = (animationTime, cb) => {
   const setStateTimeout = (numbers) => {
+    const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
+
     cb({ numbers });
-    return startimeout(animationTime);
+    return startimeout(maxAnimationTime);
   };
   // Sequence of animations
   const sequences = [
-    () => setStateTimeout(computeDelays(getCustomValues(), animationTime)),
+    () => setStateTimeout(computeDelays(getCustomValues(), animationTime, ANIMATION_DELAY)),
     () => setStateTimeout(SHAPES[0]),
     () => setStateTimeout(getTimeValues()),
   ];
@@ -92,10 +98,9 @@ const NumberLineClock = (clock, options) => (
       hours={clock.hours}
       minutes={clock.minutes}
       animationTime={clock.animationTime}
+      defaultAnimationTime={options.defaultAnimationTime}
       animationDelay={clock.animationDelay}
       size={options.clockSize}
-      minutesRandom={options.minutesRandom}
-      hoursRandom={options.hoursRandom}
     />
   </div>
 );
@@ -181,7 +186,7 @@ export default class ClockClock24 extends Component {
         { ButtonTest(onTestClick) }
         <div className="clockclock24" style={clockStyle}>
           {numbers
-            .map(number => Number(number, { clockSize }))
+            .map(number => Number(number, { clockSize, defaultAnimationTime: animationTime }))
           }
         </div>
       </div>
