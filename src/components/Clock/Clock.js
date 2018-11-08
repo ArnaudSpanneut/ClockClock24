@@ -17,6 +17,7 @@ const Clock = (props) => {
     animationTime,
     defaultAnimationTime,
     animationDelay,
+    animationType,
   } = props;
   const hoursDegree = calculateRotation(hours);
   const minutesDegree = calculateRotation(minutes);
@@ -27,6 +28,7 @@ const Clock = (props) => {
   const needleTransition = {
     transitionDuration: `${animationTime || defaultAnimationTime}ms`,
     transitionDelay: `${animationDelay || 0}ms`,
+    transitionTimingFunction: (animationType || 'ease'),
   };
   const needleWidth = size / 10;
   const needleHeight = size / 2;

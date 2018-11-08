@@ -60,6 +60,12 @@ const computeDelays = (numbers, animationTime, delay = 0) => (
     };
   })
 );
+const setAnimationType = (numbers, animationType) => (
+  updateClocksProperties(numbers, clock => ({
+    ...clock,
+    animationType,
+  }))
+);
 const getMaxAnimationTime = numbers => (
   findClock(numbers, (a, b) => a.animationTime < b.animationTime).animationTime
 );
@@ -78,8 +84,8 @@ const startDancing = (animationTime, cb) => {
   // Sequence of animations
   const sequences = [
     () => setStateTimeout(computeDelays(getCustomValues(), animationTime, ANIMATION_DELAY)),
-    () => setStateTimeout(SHAPES[0]),
-    () => setStateTimeout(getTimeValues()),
+    () => setStateTimeout(setAnimationType(SHAPES[0], 'linear')),
+    () => setStateTimeout(setAnimationType(getTimeValues(), 'ease-out')),
   ];
 
   return runSequences(sequences)
@@ -100,6 +106,7 @@ const NumberLineClock = (clock, options) => (
       animationTime={clock.animationTime}
       defaultAnimationTime={options.defaultAnimationTime}
       animationDelay={clock.animationDelay}
+      animationType={clock.animationType}
       size={options.clockSize}
     />
   </div>

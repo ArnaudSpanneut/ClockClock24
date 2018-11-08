@@ -7,7 +7,6 @@
 .clock_needle {
   position: absolute;
   transition-name: transform;
-  transition-timing-function: ease-in-out;
 }
 .clock_needleRotate {
   position: absolute;
