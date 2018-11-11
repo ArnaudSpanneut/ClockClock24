@@ -39,3 +39,4 @@ export const flatArr = arr => arr
     : entry), []);
 export const findClock = (numbers, conditionFunc) => flatArr(numbers)
   .sort((a, b) => (conditionFunc(a, b) ? 1 : -1))[0];
+export const getLastArrItem = arr => arr[arr.length - 1];

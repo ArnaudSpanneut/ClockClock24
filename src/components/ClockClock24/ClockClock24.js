@@ -12,6 +12,7 @@ import {
   getClockSize,
   updateClocksProperties,
   findClock,
+  getLastArrItem,
 } from '../../utils';
 
 import Number from './Number';
@@ -116,7 +117,7 @@ const startDancing = (animationTime, prevNumbers, cb) => {
 
   return runSequences(sequences)
     .then(() => nextTime())
-    .then(() => startDancing(animationTime, rotationsState[2], cb));
+    .then(() => startDancing(animationTime, getLastArrItem(rotationsState), cb));
 };
 
 export default class ClockClock24 extends Component {
