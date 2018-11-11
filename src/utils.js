@@ -1,7 +1,14 @@
 export function startimeout(time) {
-  return new Promise(resolve => setTimeout(() => {
-    resolve();
-  }, time));
+  let timeout = null;
+  const promise = new Promise((resolve) => {
+    timeout = setTimeout(resolve, time);
+    return timeout;
+  });
+
+  return {
+    promise,
+    cancel: () => clearTimeout(timeout),
+  };
 }
 export function runSequences(arr) {
   return arr

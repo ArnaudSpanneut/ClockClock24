@@ -90,34 +90,46 @@ const getMaxAnimationTime = numbers => (
  * @return {Promise} Next startDancing method
  */
 const startDancing = (animationTime, prevNumbers, cb) => {
-  const setStateTimeout = (numbers) => {
-    const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
-
-    cb({ numbers });
-    return startimeout(maxAnimationTime - 5).then(() => numbers);
-  };
+  let timeout = null;
   const numbersState = [
     getCustomValues(),
     SHAPES[0],
     getTimeValues(),
   ];
+
+  const setStateTimeout = (numbers) => {
+    const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
+    timeout = startimeout(maxAnimationTime - 5);
+
+    cb({ numbers });
+    return timeout.promise.then(() => numbers);
+  };
   const rotationsState = numbersState
     .reduce((acc, arr, index) => {
       const prev = acc[index - 1] || prevNumbers;
 
       return acc.concat([computeRotation(arr, prev)]);
     }, []);
-
   // Sequence of animations
   const sequences = [
     () => setStateTimeout(setAnimationType(computeDelays(rotationsState[0], animationTime, ANIMATION_DELAY), 'start')),
     () => setStateTimeout(computeDelays(rotationsState[1], animationTime, 0)),
     () => setStateTimeout(setAnimationType(computeDelays(rotationsState[2], animationTime, 0), 'end')),
   ];
+  const promise = runSequences(sequences)
+    .then(() => {
+      timeout = nextTime();
+      return timeout.promise;
+    })
+    .then(() => {
+      timeout = startDancing(animationTime, getLastArrItem(rotationsState), cb);
+      return timeout.promise;
+    });
 
-  return runSequences(sequences)
-    .then(() => nextTime())
-    .then(() => startDancing(animationTime, getLastArrItem(rotationsState), cb));
+  return {
+    promise,
+    cancel: () => ((timeout) ? timeout.cancel() : false),
+  };
 };
 
 export default class ClockClock24 extends Component {
@@ -132,15 +144,21 @@ export default class ClockClock24 extends Component {
   componentDidMount() {
     const { animationTime } = this.props;
     const { numbers } = this.state;
+    const timeout = nextTime();
 
-    this.timeout = nextTime()
+    this.timeout = timeout;
+    return timeout.promise
       .then(() => startDancing(animationTime, numbers, state => this.setState(state)));
-
-    return this.timeout;
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timeout);
+    this.cancelTimeout();
+  }
+
+  cancelTimeout() {
+    if (this.timeout) {
+      this.timeout.cancel();
+    }
   }
 
   render() {
@@ -152,7 +170,11 @@ export default class ClockClock24 extends Component {
       width,
     };
 
-    const onTestClick = () => startDancing(animationTime, numbers, state => this.setState(state));
+    const onTestClick = () => {
+      this.cancelTimeout();
+      this.timeout = startDancing(animationTime, numbers, state => this.setState(state));
+      return true;
+    };
 
     return (
       <div className="clockclock24_container">
