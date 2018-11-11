@@ -14,7 +14,8 @@ import {
   findClock,
 } from '../../utils';
 
-import Clock from '../Clock/Clock';
+import Number from './Number';
+import ButtonTest from './ButtonTest';
 
 const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60000;
@@ -66,6 +67,19 @@ const setAnimationType = (numbers, animationType) => (
     animationType,
   }))
 );
+const calculRotation = (start, end) => 360 - ((start % 360) - end);
+const computeRotation = (numbers, prevNumbers) => (
+  updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
+    const { hours, minutes } = prevNumbers[numberIndex][clockLinesIndex][clockIndex];
+    const nextHours = hours + calculRotation(hours, clock.hours);
+    const nextMinutes = minutes + calculRotation(minutes, clock.minutes);
+    return {
+      ...clock,
+      hours: nextHours,
+      minutes: nextMinutes,
+    };
+  })
+);
 const getMaxAnimationTime = numbers => (
   findClock(numbers, (a, b) => a.animationTime < b.animationTime).animationTime
 );
@@ -74,86 +88,36 @@ const getMaxAnimationTime = numbers => (
  * @param {Function} setStateFunc - React set state function
  * @return {Promise} Next startDancing method
  */
-const startDancing = (animationTime, cb) => {
+const startDancing = (animationTime, prevNumbers, cb) => {
   const setStateTimeout = (numbers) => {
     const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
 
     cb({ numbers });
-    return startimeout(maxAnimationTime);
+    return startimeout(maxAnimationTime - 5).then(() => numbers);
   };
+  const numbersState = [
+    getCustomValues(),
+    SHAPES[0],
+    getTimeValues(),
+  ];
+  const rotationsState = numbersState
+    .reduce((acc, arr, index) => {
+      const prev = acc[index - 1] || prevNumbers;
+
+      return acc.concat([computeRotation(arr, prev)]);
+    }, []);
+
   // Sequence of animations
   const sequences = [
-    () => setStateTimeout(computeDelays(getCustomValues(), animationTime, ANIMATION_DELAY)),
-    () => setStateTimeout(setAnimationType(SHAPES[0], 'linear')),
-    () => setStateTimeout(setAnimationType(getTimeValues(), 'ease-out')),
+    () => setStateTimeout(setAnimationType(computeDelays(rotationsState[0], animationTime, ANIMATION_DELAY), 'start')),
+    () => setStateTimeout(computeDelays(rotationsState[1], animationTime, 0)),
+    () => setStateTimeout(setAnimationType(computeDelays(rotationsState[2], animationTime, 0), 'end')),
   ];
 
   return runSequences(sequences)
     .then(() => nextTime())
-    .then(() => startDancing(animationTime, cb));
+    .then(() => startDancing(animationTime, rotationsState[2], cb));
 };
-// Components
-/**
- * Display a single clock block
- * @param {Array} clocks - Set of clocks that compose the line
- * @param { Object } options - Clocks Options
- */
-const NumberLineClock = (clock, options) => (
-  <div className="clockclock24_number_line_clock">
-    <Clock
-      hours={clock.hours}
-      minutes={clock.minutes}
-      animationTime={clock.animationTime}
-      defaultAnimationTime={options.defaultAnimationTime}
-      animationDelay={clock.animationDelay}
-      animationType={clock.animationType}
-      size={options.clockSize}
-    />
-  </div>
-);
-/**
- * Display a line of 2 clocks to form a number
- * @param {Array} numberLines - Number lines (group by 2 clocks)
- * @param {Object} options - Clocks options
- */
-const NumberLines = (numberLines, options) => (
-  numberLines
-    .map((numberLine, index) => (
-      <div
-        className="clockclock24_number_line"
-        key={index}
-      >
-        {numberLine
-          .map(clock => NumberLineClock(clock, options))
-        }
-      </div>
-    ))
-);
-/**
- * The number to display
- * @param {line} numberLines - Set of line to form the number
- * @param {Object} options  - Clocks options
- */
-const Number = (numberLines, options) => (
-  <div className="clockclock24_number">
-    <div className="number">
-      {NumberLines(numberLines, options)}
-    </div>
-  </div>
-);
-/**
- * Button to launch animations
- */
-const ButtonTest = onClick => (
-  <button
-    className="clockclock24_test_button"
-    type="button"
-    onClick={() => onClick()}
-  >
-    Dance&nbsp;
-    <span role="img" aria-label="dance">💃</span>
-  </button>
-);
 
 export default class ClockClock24 extends Component {
   constructor(props) {
@@ -166,9 +130,10 @@ export default class ClockClock24 extends Component {
 
   componentDidMount() {
     const { animationTime } = this.props;
+    const { numbers } = this.state;
 
     this.timeout = nextTime()
-      .then(() => startDancing(animationTime, state => this.setState(state)));
+      .then(() => startDancing(animationTime, numbers, state => this.setState(state)));
 
     return this.timeout;
   }
@@ -186,7 +151,7 @@ export default class ClockClock24 extends Component {
       width,
     };
 
-    const onTestClick = () => startDancing(animationTime, state => this.setState(state));
+    const onTestClick = () => startDancing(animationTime, numbers, state => this.setState(state));
 
     return (
       <div className="clockclock24_container">

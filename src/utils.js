@@ -1,12 +1,12 @@
-export function startimeout(timeout) {
+export function startimeout(time) {
   return new Promise(resolve => setTimeout(() => {
     resolve();
-  }, timeout));
+  }, time));
 }
 export function runSequences(arr) {
   return arr
     .reduce((promise, func) => promise
-      .then(() => func()),
+      .then(func),
     Promise.resolve());
 }
 export function getArrTime() {

@@ -3,10 +3,12 @@ import './clock.css';
 
 import Needle from '../Needle/Needle';
 
-const calculateRotation = (degree) => {
-  const START_DEGREE = 180;
-
-  return START_DEGREE + degree;
+const ANIMATION_START_TIMING = 'cubic-bezier(.27,0,.31,.41)';
+const ANIMATION_END_TIMING = 'cubic-bezier(.9,.8,.62,.83)';
+const ANIMATION_DEFAULT_TIMING = 'linear';
+const ANIMATION_TIMING_CONFIG = {
+  start: ANIMATION_START_TIMING,
+  end: ANIMATION_END_TIMING,
 };
 
 const Clock = (props) => {
@@ -19,29 +21,29 @@ const Clock = (props) => {
     animationDelay,
     animationType,
   } = props;
-  const hoursDegree = calculateRotation(hours);
-  const minutesDegree = calculateRotation(minutes);
   const clockSizeStyle = {
     width: size,
     height: size,
   };
-  const needleTransition = {
-    transitionDuration: `${animationTime || defaultAnimationTime}ms`,
-    transitionDelay: `${animationDelay || 0}ms`,
-    transitionTimingFunction: (animationType || 'ease'),
-  };
+  const transitionTime = animationTime || defaultAnimationTime;
+  const transitionDelay = animationDelay || 0;
+  const transitionTiming = (ANIMATION_TIMING_CONFIG[animationType])
+    ? ANIMATION_TIMING_CONFIG[animationType]
+    : ANIMATION_DEFAULT_TIMING;
+  const transition = `all ${transitionTime}ms ${transitionDelay}ms ${transitionTiming}`;
+
   const needleWidth = size / 10;
   const needleHeight = size / 2;
   const style = {
     hours: {
-      transform: `rotate(${hoursDegree - 360}deg)`,
+      transform: `rotate(${hours}deg)`,
       ...clockSizeStyle,
-      ...needleTransition,
+      ...{ transition },
     },
     minutes: {
-      transform: `rotate(${minutesDegree + 360}deg)`,
+      transform: `rotate(${minutes}deg)`,
       ...clockSizeStyle,
-      ...needleTransition,
+      ...{ transition },
     },
     needleRotate: {
       top: `calc(50% - ${(needleWidth / 2) - 0.5}px)`,
