@@ -1,13 +1,19 @@
 export function startimeout(time) {
   let timeout = null;
-  const promise = new Promise((resolve) => {
+  let gReject = null;
+  const promise = new Promise((resolve, reject) => {
     timeout = setTimeout(resolve, time);
+    gReject = reject;
     return timeout;
   });
 
   return {
     promise,
-    cancel: () => clearTimeout(timeout),
+    cancel: () => {
+      gReject();
+      clearTimeout(timeout);
+      return true;
+    },
   };
 }
 export function runSequences(arr) {
