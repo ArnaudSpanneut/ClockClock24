@@ -61,14 +61,14 @@ const nextTime = () => startimeout(getRemainingTime());
 const startDancing = (animationTime, prevNumbers, cb) => {
   const numbersState = [
     getCustomValues(),
-    SHAPES[0],
+    getCustomValues(),
     getTimeValues(),
   ];
 
   let timeout = null;
   const setStateTimeout = (numbers) => {
     const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
-    timeout = startimeout(maxAnimationTime - 5);
+    timeout = startimeout(maxAnimationTime);
 
     cb({ numbers });
     return timeout.promise.then(() => numbers);

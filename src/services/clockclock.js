@@ -1,7 +1,8 @@
 
 const ANIMATION_DELAY = 300;
 
-const calculRotation = (start, end) => 360 - ((start % 360) - end);
+const calculRotation = (start, end) => start + (360 - ((start % 360) - end));
+const calculReverseRotation = (start, end) => start + ((end - (start + 360)) % 360) - 360;
 
 const updateClocksProperties = (numbers, cb) => numbers
   .map((number, numberIndex) => number
@@ -26,12 +27,10 @@ const computeAnimationType = (numbers, animationType) => (
 const computeRotation = (numbers, prevNumbers) => (
   updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
     const { hours, minutes } = prevNumbers[numberIndex][clockLinesIndex][clockIndex];
-    const nextHours = hours + calculRotation(hours, clock.hours);
-    const nextMinutes = minutes + calculRotation(minutes, clock.minutes);
     return {
       ...clock,
-      hours: nextHours,
-      minutes: nextMinutes,
+      hours: calculRotation(hours, clock.hours),
+      minutes: calculReverseRotation(minutes, clock.minutes),
     };
   })
 );
