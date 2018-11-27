@@ -32,7 +32,7 @@ const getTimeValues = () => getArrTime()
  * Get a random set of configuration to display forms
  * @return {Array} Clocks config
  */
-const getCustomValues = () => {
+const getRandowShape = () => {
   const randomIndex = getRandomNumber(SHAPES.length - 1);
   return SHAPES[randomIndex];
 };
@@ -60,8 +60,9 @@ const nextTime = () => startimeout(getRemainingTime());
  */
 const startDancing = (animationTime, prevNumbers, cb) => {
   const numbersState = [
-    getCustomValues(),
-    getCustomValues(),
+    getRandowShape(),
+    getRandowShape(),
+    getRandowShape(),
     getTimeValues(),
   ];
 
