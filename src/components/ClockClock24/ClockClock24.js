@@ -14,7 +14,10 @@ import {
   getLastArrItem,
   getRandomNumber,
 } from '../../utils';
-import computeSequences from '../../services/clockclock';
+import {
+  computeSequences,
+  computeClearRotations,
+} from '../../services/clockclock';
 
 import Number from './Number';
 import ButtonTest from './ButtonTest';
@@ -58,9 +61,8 @@ const nextTime = () => startimeout(getRemainingTime());
  * @param {Function} setStateFunc - React set state function
  * @return {Promise} Next startDancing method
  */
-const startDancing = (animationTime, prevNumbers, cb) => {
+const startDancing = (animationTime, prevNumbers, onChange) => {
   const numbersState = [
-    getRandowShape(),
     getRandowShape(),
     getRandowShape(),
     getTimeValues(),
@@ -71,7 +73,7 @@ const startDancing = (animationTime, prevNumbers, cb) => {
     const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
     timeout = startimeout(maxAnimationTime);
 
-    cb({ numbers });
+    onChange({ numbers });
     return timeout.promise.then(() => numbers);
   };
 
@@ -82,11 +84,15 @@ const startDancing = (animationTime, prevNumbers, cb) => {
 
   const promise = runSequences(sequencesPromise)
     .then(() => {
+      const cleanNumbers = computeClearRotations(getLastArrItem(sequences));
+      onChange({ numbers: cleanNumbers });
+
       timeout = nextTime();
-      return timeout.promise;
+      return timeout.promise
+        .then(() => cleanNumbers);
     })
-    .then(() => {
-      timeout = startDancing(animationTime, getLastArrItem(sequences), cb);
+    .then((lastNumbers) => {
+      timeout = startDancing(animationTime, lastNumbers, onChange);
       return timeout.promise;
     });
 

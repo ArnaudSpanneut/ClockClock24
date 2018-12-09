@@ -25,7 +25,10 @@ const Clock = (props) => {
     width: size,
     height: size,
   };
-  const transitionTime = animationTime || defaultAnimationTime;
+  const isDefined = val => ({}.undef !== val);
+  const transitionTime = isDefined(animationTime)
+    ? animationTime
+    : defaultAnimationTime;
   const transitionDelay = animationDelay || 0;
   const transitionTiming = (ANIMATION_TIMING_CONFIG[animationType])
     ? ANIMATION_TIMING_CONFIG[animationType]
