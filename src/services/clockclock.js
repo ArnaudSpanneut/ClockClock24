@@ -35,6 +35,23 @@ const computeRotation = (numbers, prevNumbers) => (
     };
   })
 );
+export const computeClearRotations = numbers => (
+  updateClocksProperties(numbers, clock => ({
+    hours: clock.hours % 360,
+    minutes: clock.minutes % 360,
+    animationTime: 0,
+    animationDelay: 0,
+  }))
+);
+const computeAnimationTypeByPosition = (state, index, nbState) => {
+  if (index === 0) {
+    return computeAnimationType(state, 'start');
+  }
+  if (index === nbState - 1) {
+    return computeAnimationType(state, 'end');
+  }
+  return state;
+};
 
 /**
  * Apply the sequences values
@@ -43,7 +60,7 @@ const computeRotation = (numbers, prevNumbers) => (
  * @param {Number} animationTime Time for the animation
  * @return {Array} New sequences states
  */
-export default function computeSequences(sequences, prevNumbers, animationTime) {
+export function computeSequences(sequences, prevNumbers, animationTime) {
   const rotationsState = sequences
     .reduce((acc, arr, index) => {
       const prev = acc[index - 1] || prevNumbers;
@@ -53,18 +70,8 @@ export default function computeSequences(sequences, prevNumbers, animationTime) 
 
   return rotationsState
     .map((state, index) => {
-      const isFirst = (index === 0);
-      const isLast = (index === rotationsState.length - 1);
-      const animationDelay = (isFirst) ? ANIMATION_DELAY : 0;
-      let nextState = null;
-
-      if (isFirst) {
-        nextState = computeAnimationType(state, 'start');
-      } else if (isLast) {
-        nextState = computeAnimationType(state, 'end');
-      } else {
-        nextState = state;
-      }
+      const animationDelay = (index === 0) ? ANIMATION_DELAY : 0;
+      const nextState = computeAnimationTypeByPosition(state, index, rotationsState.length);
 
       return computeDelays(nextState, animationTime, animationDelay);
     });
