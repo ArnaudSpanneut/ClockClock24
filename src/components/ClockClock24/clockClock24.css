@@ -17,6 +17,11 @@
   background-color: var(--clock-backgound-color);
   box-shadow: 0px -2px 17px 5px rgba(0, 0, 0, .15);
 }
+@media screen and (max-width: 680px) {
+  .clockclock24 {
+    padding: var(--clock-phone-padding);
+  }
+}
 .clockclock24_number {
   flex: 1;
 }

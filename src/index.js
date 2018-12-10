@@ -5,10 +5,16 @@ import './index.css';
 import ClockClock24 from './components/ClockClock24/ClockClock24';
 import config from './config';
 
+const screenClockSize = (window.screen.width / 8) - config.CLOCK_PADDING - 10;
+
+const clockSize = (screenClockSize < config.CLOCK_SIZE)
+  ? screenClockSize
+  : config.CLOCK_SIZE;
+
 ReactDOM.render(
   <div className="container">
     <ClockClock24
-      clockSize={config.CLOCK_SIZE}
+      clockSize={clockSize}
       clockPadding={config.CLOCK_PADDING}
       animationTime={config.ANIMATION_TIME}
     />

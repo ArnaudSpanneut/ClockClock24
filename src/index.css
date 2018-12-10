@@ -1,6 +1,7 @@
 :root {
   --clock-backgound-color: #1D1915;
   --clock-padding: 30px;
+  --clock-phone-padding: 10px;
   --clock-small-padding: 3px;
 }
 
