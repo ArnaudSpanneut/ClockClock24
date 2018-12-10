@@ -66,6 +66,50 @@ const SQUARES = [
     [{ hours: 45, minutes: 45 }, { hours: 45, minutes: 45 }],
   ],
 ];
+const SYMMETRICAL_1 = [
+  [
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+  ],
+  [
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+  ],
+  [
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+  ],
+  [
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+  ],
+];
+const SYMMETRICAL_2 = [
+  [
+    [{ hours: 135, minutes: 135 }, { hours: 135, minutes: 135 }],
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+    [{ hours: 45, minutes: 45 }, { hours: 45, minutes: 45 }],
+  ],
+  [
+    [{ hours: 135, minutes: 135 }, { hours: 135, minutes: 135 }],
+    [{ hours: 270, minutes: 270 }, { hours: 270, minutes: 270 }],
+    [{ hours: 45, minutes: 45 }, { hours: 45, minutes: 45 }],
+  ],
+  [
+    [{ hours: 235, minutes: 235 }, { hours: 235, minutes: 235 }],
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+    [{ hours: 315, minutes: 315 }, { hours: 315, minutes: 315 }],
+  ],
+  [
+    [{ hours: 235, minutes: 235 }, { hours: 235, minutes: 235 }],
+    [{ hours: 90, minutes: 90 }, { hours: 90, minutes: 90 }],
+    [{ hours: 315, minutes: 315 }, { hours: 315, minutes: 315 }],
+  ],
+];
 
 const LINEAR = [
   OBLIQUES,
@@ -74,6 +118,8 @@ const LINEAR = [
 ];
 const SYMMETRICAL = [
   SQUARES,
+  SYMMETRICAL_1,
+  SYMMETRICAL_2,
 ];
 
 export default {

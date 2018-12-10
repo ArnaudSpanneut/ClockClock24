@@ -71,11 +71,19 @@ const nextTime = () => startimeout(getRemainingTime());
 const startDancing = (animationTime, prevNumbers, onChange) => {
   const shapeType = getRandowShapeType();
   const isReverse = shapeType === 'SYMMETRICAL';
-  const numbersState = [
+  const getReverseShape = () => {
+    const shape = getRandowShape(shapeType);
+
+    return [shape, shape];
+  };
+  const getOtherShape = () => ([
     getRandowShape(shapeType),
     getRandowShape(shapeType),
-    getTimeValues(),
-  ];
+  ]);
+  const numbersState = [].concat(
+    isReverse ? getReverseShape() : getOtherShape(),
+    [getTimeValues()],
+  );
 
   let timeout = null;
   const setStateTimeout = (numbers) => {
