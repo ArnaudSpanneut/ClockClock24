@@ -5,6 +5,7 @@ import './clockClock24.css';
 import NUMBERS from '../../constants/numbers';
 import SHAPES from '../../constants/shapes';
 
+
 import {
   startimeout,
   runSequences,
@@ -14,7 +15,10 @@ import {
   getLastArrItem,
   getRandomNumber,
 } from '../../utils';
-import computeSequences from '../../services/clockclock';
+import {
+  computeSequences,
+  computeClearRotations,
+} from '../../services/clockclock';
 
 import Number from './Number';
 import ButtonTest from './ButtonTest';
@@ -32,9 +36,15 @@ const getTimeValues = () => getArrTime()
  * Get a random set of configuration to display forms
  * @return {Array} Clocks config
  */
-const getRandowShape = () => {
-  const randomIndex = getRandomNumber(SHAPES.length - 1);
-  return SHAPES[randomIndex];
+const getRandowShape = (type) => {
+  const shapes = SHAPES[type];
+  const randomIndex = getRandomNumber(shapes.length - 1);
+  return shapes[randomIndex];
+};
+const getRandowShapeType = () => {
+  const shapesTypes = Object.keys(SHAPES);
+  const randomIndex = getRandomNumber(shapesTypes.length - 1);
+  return shapesTypes[randomIndex];
 };
 /**
  * Get the remaining time before the time change
@@ -58,11 +68,12 @@ const nextTime = () => startimeout(getRemainingTime());
  * @param {Function} setStateFunc - React set state function
  * @return {Promise} Next startDancing method
  */
-const startDancing = (animationTime, prevNumbers, cb) => {
+const startDancing = (animationTime, prevNumbers, onChange) => {
+  const shapeType = getRandowShapeType();
+  const isReverse = shapeType === 'SYMMETRICAL';
   const numbersState = [
-    getRandowShape(),
-    getRandowShape(),
-    getRandowShape(),
+    getRandowShape(shapeType),
+    getRandowShape(shapeType),
     getTimeValues(),
   ];
 
@@ -71,22 +82,27 @@ const startDancing = (animationTime, prevNumbers, cb) => {
     const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
     timeout = startimeout(maxAnimationTime);
 
-    cb({ numbers });
+    onChange({ numbers });
     return timeout.promise.then(() => numbers);
   };
 
   // Sequence of animations
-  const sequences = computeSequences(numbersState, prevNumbers, animationTime);
+  const sequenceOptions = { animationTime, isReverse };
+  const sequences = computeSequences(numbersState, prevNumbers, sequenceOptions);
   const sequencesPromise = sequences
     .map(numbers => () => setStateTimeout(numbers));
 
   const promise = runSequences(sequencesPromise)
     .then(() => {
+      const cleanNumbers = computeClearRotations(getLastArrItem(sequences));
+      onChange({ numbers: cleanNumbers });
+
       timeout = nextTime();
-      return timeout.promise;
+      return timeout.promise
+        .then(() => cleanNumbers);
     })
-    .then(() => {
-      timeout = startDancing(animationTime, getLastArrItem(sequences), cb);
+    .then((lastNumbers) => {
+      timeout = startDancing(animationTime, lastNumbers, onChange);
       return timeout.promise;
     });
 
