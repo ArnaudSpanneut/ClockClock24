@@ -5,6 +5,7 @@ import './clockClock24.css';
 import NUMBERS from '../../constants/numbers';
 import SHAPES from '../../constants/shapes';
 
+
 import {
   startimeout,
   runSequences,
@@ -35,9 +36,15 @@ const getTimeValues = () => getArrTime()
  * Get a random set of configuration to display forms
  * @return {Array} Clocks config
  */
-const getRandowShape = () => {
-  const randomIndex = getRandomNumber(SHAPES.length - 1);
-  return SHAPES[randomIndex];
+const getRandowShape = (type) => {
+  const shapes = SHAPES[type];
+  const randomIndex = getRandomNumber(shapes.length - 1);
+  return shapes[randomIndex];
+};
+const getRandowShapeType = () => {
+  const shapesTypes = Object.keys(SHAPES);
+  const randomIndex = getRandomNumber(shapesTypes.length - 1);
+  return shapesTypes[randomIndex];
 };
 /**
  * Get the remaining time before the time change
@@ -62,9 +69,11 @@ const nextTime = () => startimeout(getRemainingTime());
  * @return {Promise} Next startDancing method
  */
 const startDancing = (animationTime, prevNumbers, onChange) => {
+  const shapeType = getRandowShapeType();
+  const isReverse = shapeType === 'SYMMETRICAL';
   const numbersState = [
-    getRandowShape(),
-    getRandowShape(),
+    getRandowShape(shapeType),
+    getRandowShape(shapeType),
     getTimeValues(),
   ];
 
@@ -78,7 +87,8 @@ const startDancing = (animationTime, prevNumbers, onChange) => {
   };
 
   // Sequence of animations
-  const sequences = computeSequences(numbersState, prevNumbers, animationTime);
+  const sequenceOptions = { animationTime, isReverse };
+  const sequences = computeSequences(numbersState, prevNumbers, sequenceOptions);
   const sequencesPromise = sequences
     .map(numbers => () => setStateTimeout(numbers));
 

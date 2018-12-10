@@ -24,16 +24,19 @@ const computeAnimationType = (numbers, animationType) => (
     animationType,
   }))
 );
-const computeRotation = (numbers, prevNumbers) => (
-  updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
+const computeRotation = (numbers, prevNumbers, options = {}) => {
+  const { isMinutesReversed } = options;
+  return updateClocksProperties(numbers, (clock, clockIndex, clockLinesIndex, numberIndex) => {
     const { hours, minutes } = prevNumbers[numberIndex][clockLinesIndex][clockIndex];
     return {
       ...clock,
       hours: calculRotation(hours, clock.hours),
-      minutes: calculReverseRotation(minutes, clock.minutes),
+      minutes: isMinutesReversed
+        ? calculReverseRotation(minutes, clock.minutes)
+        : calculRotation(minutes, clock.minutes),
     };
-  })
-);
+  });
+};
 export const computeClearRotations = numbers => (
   updateClocksProperties(numbers, clock => ({
     hours: clock.hours % 360,
@@ -56,15 +59,21 @@ const computeAnimationTypeByPosition = (state, index, nbState) => {
  * Apply the sequences values
  * @param {Array} sequences Numbers
  * @param {Array} prevNumbers The last number displayed
- * @param {Number} animationTime Time for the animation
+ * @param {Object} options Clock options
+ * @param {Number} options.animationTime Time for the animation
+ * @param {Boolean} options.isReverse Reverse the rotation of the needles
  * @return {Array} New sequences states
  */
-export function computeSequences(sequences, prevNumbers, animationTime) {
+export function computeSequences(sequences, prevNumbers, options = {}) {
+  const { animationTime, isReverse } = options;
   const rotationsState = sequences
     .reduce((acc, arr, index) => {
       const prev = acc[index - 1] || prevNumbers;
+      const rotationOptions = {
+        isMinutesReversed: isReverse,
+      };
 
-      return acc.concat([computeRotation(arr, prev)]);
+      return acc.concat([computeRotation(arr, prev, rotationOptions)]);
     }, []);
 
   return rotationsState

@@ -67,11 +67,16 @@ const SQUARES = [
   ],
 ];
 
-const SHAPES = [
+const LINEAR = [
   OBLIQUES,
   WIND,
   DEACTIVATE,
+];
+const SYMMETRICAL = [
   SQUARES,
 ];
 
-export default SHAPES;
+export default {
+  LINEAR,
+  SYMMETRICAL,
+};
