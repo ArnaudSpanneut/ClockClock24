@@ -5,7 +5,6 @@ import './clockClock24.css';
 import NUMBERS from '../../constants/numbers';
 import SHAPES from '../../constants/shapes';
 
-
 import {
   startimeout,
   runSequences,
@@ -30,8 +29,7 @@ const ONE_MINUTES_IN_MILLI = 60000;
  * Get the clocks config depends of the number
  * @return {Array} Clocks config
  */
-const getTimeValues = () => getArrTime()
-  .map(line => NUMBERS[line]);
+const getTimeValues = () => getArrTime().map((line) => NUMBERS[line]);
 /**
  * Get a random set of configuration to display forms
  * @return {Array} Clocks config
@@ -55,9 +53,8 @@ const getRemainingTime = () => {
   const secondsInMilli = currentTime.getSeconds() * ONE_MILLI;
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
 };
-const getMaxAnimationTime = numbers => (
-  findClock(numbers, (a, b) => a.animationTime < b.animationTime).animationTime
-);
+const getMaxAnimationTime = (numbers) =>
+  findClock(numbers, (a, b) => a.animationTime < b.animationTime).animationTime;
 /**
  * Waiting for the next minute
  * @return {Promise} Remaining time
@@ -76,10 +73,10 @@ const startDancing = (animationTime, prevNumbers, onChange) => {
 
     return [shape, shape];
   };
-  const getOtherShape = () => ([
+  const getOtherShape = () => [
     getRandowShape(shapeType),
     getRandowShape(shapeType),
-  ]);
+  ];
   const numbersState = [].concat(
     isReverse ? getReverseShape() : getOtherShape(),
     [getTimeValues()],
@@ -96,9 +93,13 @@ const startDancing = (animationTime, prevNumbers, onChange) => {
 
   // Sequence of animations
   const sequenceOptions = { animationTime, isReverse };
-  const sequences = computeSequences(numbersState, prevNumbers, sequenceOptions);
-  const sequencesPromise = sequences
-    .map(numbers => () => setStateTimeout(numbers));
+  const sequences = computeSequences(
+    numbersState,
+    prevNumbers,
+    sequenceOptions,
+  );
+  const sequencesPromise = sequences.map((numbers) => () =>
+    setStateTimeout(numbers));
 
   const promise = runSequences(sequencesPromise)
     .then(() => {
@@ -106,8 +107,7 @@ const startDancing = (animationTime, prevNumbers, onChange) => {
       onChange({ numbers: cleanNumbers });
 
       timeout = nextTime();
-      return timeout.promise
-        .then(() => cleanNumbers);
+      return timeout.promise.then(() => cleanNumbers);
     })
     .then((lastNumbers) => {
       timeout = startDancing(animationTime, lastNumbers, onChange);
@@ -116,7 +116,7 @@ const startDancing = (animationTime, prevNumbers, onChange) => {
 
   return {
     promise,
-    cancel: () => ((timeout) ? timeout.cancel() : false),
+    cancel: () => (timeout ? timeout.cancel() : false),
   };
 };
 
@@ -135,8 +135,8 @@ export default class ClockClock24 extends Component {
     const timeout = nextTime();
 
     this.timeout = timeout;
-    return timeout.promise
-      .then(() => startDancing(animationTime, numbers, state => this.setState(state)));
+    return timeout.promise.then(() =>
+      startDancing(animationTime, numbers, (state) => this.setState(state)));
   }
 
   componentWillUnmount() {
@@ -160,17 +160,17 @@ export default class ClockClock24 extends Component {
 
     const onTestClick = () => {
       this.cancelTimeout();
-      this.timeout = startDancing(animationTime, numbers, state => this.setState(state));
+      this.timeout = startDancing(animationTime, numbers, (state) =>
+        this.setState(state));
       return true;
     };
 
     return (
       <div className="clockclock24_container">
-        { ButtonTest(onTestClick) }
+        {ButtonTest(onTestClick)}
         <div className="clockclock24" style={clockStyle}>
-          {numbers
-            .map(number => Number(number, { clockSize, defaultAnimationTime: animationTime }))
-          }
+          {numbers.map((number) =>
+            Number(number, { clockSize, defaultAnimationTime: animationTime }))}
         </div>
       </div>
     );

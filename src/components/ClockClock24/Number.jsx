@@ -10,9 +10,7 @@ import NumberLines from './NumberLines';
 export default function Number(numberLines, options) {
   return (
     <div className="clockclock24_number">
-      <div className="number">
-        { NumberLines(numberLines, options) }
-      </div>
+      <div className="number">{NumberLines(numberLines, options)}</div>
     </div>
   );
 }

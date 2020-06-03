@@ -8,15 +8,9 @@ import NumberLineClock from './NumberLineClock';
  * @param {Object} options - Clocks options
  */
 export default function NumberLines(numberLines, options) {
-  return numberLines
-    .map((numberLine, index) => (
-      <div
-        className="clockclock24_number_line"
-        key={index}
-      >
-        {numberLine
-          .map(clock => NumberLineClock(clock, options))
-        }
-      </div>
-    ))
+  return numberLines.map((numberLine, index) => (
+    <div className="clockclock24_number_line" key={index}>
+      {numberLine.map((clock) => NumberLineClock(clock, options))}
+    </div>
+  ));
 }

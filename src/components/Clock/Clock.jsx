@@ -11,26 +11,25 @@ const ANIMATION_TIMING_CONFIG = {
   end: ANIMATION_END_TIMING,
 };
 
-const Clock = (props) => {
-  const {
-    hours,
-    minutes,
-    size,
-    animationTime,
-    defaultAnimationTime,
-    animationDelay,
-    animationType,
-  } = props;
+const Clock = ({
+  hours,
+  minutes,
+  size,
+  animationTime,
+  defaultAnimationTime,
+  animationDelay,
+  animationType,
+}) => {
   const clockSizeStyle = {
     width: size,
     height: size,
   };
-  const isDefined = val => ({}.undef !== val);
+  const isDefined = (val) => ({}.undef !== val);
   const transitionTime = isDefined(animationTime)
     ? animationTime
     : defaultAnimationTime;
   const transitionDelay = animationDelay || 0;
-  const transitionTiming = (ANIMATION_TIMING_CONFIG[animationType])
+  const transitionTiming = ANIMATION_TIMING_CONFIG[animationType]
     ? ANIMATION_TIMING_CONFIG[animationType]
     : ANIMATION_DEFAULT_TIMING;
   const transition = `all ${transitionTime}ms ${transitionDelay}ms ${transitionTiming}`;
@@ -49,8 +48,8 @@ const Clock = (props) => {
       ...{ transition },
     },
     needleRotate: {
-      top: `calc(50% - ${(needleWidth / 2) - 0.5}px)`,
-      left: `calc(50% - ${(needleWidth / 2) + 0.5}px)`,
+      top: `calc(50% - ${needleWidth / 2 - 0.5}px)`,
+      left: `calc(50% - ${needleWidth / 2 + 0.5}px)`,
     },
   };
 

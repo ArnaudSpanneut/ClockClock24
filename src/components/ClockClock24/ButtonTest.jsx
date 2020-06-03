@@ -11,7 +11,9 @@ export default function ButtonTest(onClick) {
       onClick={() => onClick()}
     >
       Dance&nbsp;
-      <span role="img" aria-label="dance">💃</span>
+      <span role="img" aria-label="dance">
+        💃
+      </span>
     </button>
   );
 }

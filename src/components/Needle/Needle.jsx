@@ -1,8 +1,7 @@
 import React from 'react';
 import './needle.css';
 
-const Needle = (props) => {
-  const { height, width } = props;
+const Needle = ({ height, width }) => {
   const style = {
     height,
     width,
@@ -10,9 +9,7 @@ const Needle = (props) => {
     borderTopRightRadius: width,
   };
 
-  return (
-    <div className="needle" style={style} />
-  );
+  return <div className="needle" style={style} />;
 };
 
 export default Needle;

@@ -2,20 +2,20 @@
   padding: 10px 20px;
   margin-bottom: 20px;
   background: var(--clock-backgound-color);
-  color: #FFF;
+  color: #fff;
   outline: inherit;
   border: none;
   border-radius: 3px;
   text-transform: uppercase;
   font-size: 11px;
-  font-weight: 600; 
+  font-weight: 600;
   font-family: Helvetica, sans-serif;
 }
 .clockclock24 {
   display: flex;
   padding: var(--clock-padding);
   background-color: var(--clock-backgound-color);
-  box-shadow: 0px -2px 17px 5px rgba(0, 0, 0, .15);
+  box-shadow: 0px -2px 17px 5px rgba(0, 0, 0, 0.15);
 }
 @media screen and (max-width: 680px) {
   .clockclock24 {

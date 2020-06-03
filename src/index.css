@@ -1,12 +1,12 @@
 :root {
-  --clock-backgound-color: #1D1915;
+  --clock-backgound-color: #1d1915;
   --clock-padding: 30px;
   --clock-phone-padding: 10px;
   --clock-small-padding: 3px;
 }
 
 html {
-  background-color: #FFF;
+  background-color: #fff;
 }
 .container {
   position: absolute;
