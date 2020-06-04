@@ -3,7 +3,9 @@ import React from 'react';
 /**
  * Button to launch animations
  */
-export default function ButtonTest(onClick) {
+const ButtonTest: React.FC<{
+  onClick: () => void
+}> = ({onClick}) => {
   return (
     <button
       className="clockclock24_test_button"
@@ -17,3 +19,4 @@ export default function ButtonTest(onClick) {
     </button>
   );
 }
+export default ButtonTest;

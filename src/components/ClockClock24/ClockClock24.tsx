@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
+import { Timer } from '../../types';
+
 import './clockClock24.css';
 
 import NUMBERS from '../../constants/numbers';
-import SHAPES from '../../constants/shapes';
+import SHAPES, { ShapeType } from '../../constants/shapes';
 
 import {
   startimeout,
@@ -27,20 +29,20 @@ const ONE_MINUTES_IN_MILLI = 60000;
 
 /**
  * Get the clocks config depends of the number
- * @return {Array} Clocks config
+ * @return Clocks config
  */
-const getTimeValues = () => getArrTime().map((line) => NUMBERS[line]);
+const getTimeValues = (): any => getArrTime().map((nb) => NUMBERS[nb]);
 /**
  * Get a random set of configuration to display forms
- * @return {Array} Clocks config
+ * @return Clocks config
  */
-const getRandowShape = (type) => {
+const getRandowShape = (type: ShapeType) => {
   const shapes = SHAPES[type];
   const randomIndex = getRandomNumber(shapes.length - 1);
   return shapes[randomIndex];
 };
-const getRandowShapeType = () => {
-  const shapesTypes = Object.keys(SHAPES);
+const getRandowShapeType = (): ShapeType => {
+  const shapesTypes = Object.keys(SHAPES) as ShapeType[];
   const randomIndex = getRandomNumber(shapesTypes.length - 1);
   return shapesTypes[randomIndex];
 };
@@ -48,58 +50,67 @@ const getRandowShapeType = () => {
  * Get the remaining time before the time change
  * @return {Number} Remaining time
  */
-const getRemainingTime = () => {
-  const currentTime = new Date();
-  const secondsInMilli = currentTime.getSeconds() * ONE_MILLI;
+const getRemainingTime = (): number => {
+  const secondsInMilli = new Date().getSeconds() * ONE_MILLI;
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
 };
-const getMaxAnimationTime = (numbers) =>
-  findClock(numbers, (a, b) => a.animationTime < b.animationTime).animationTime;
+const getMaxAnimationTime = (numbers: Timer) =>
+  findClock(
+    numbers,
+    // @ts-ignore
+    (a: Clock, b: Clock) => a.animationTime < b.animationTime,
+  ).animationTime;
 /**
  * Waiting for the next minute
- * @return {Promise} Remaining time
+ * @return Remaining time
  */
 const nextTime = () => startimeout(getRemainingTime());
+
+const getReverseShape = (shapeType: ShapeType): Timer[] => {
+  const shape = getRandowShape(shapeType);
+
+  return [shape, shape];
+};
+const getOtherShape = (shapeType: ShapeType) => [
+  getRandowShape(shapeType),
+  getRandowShape(shapeType),
+];
 /**
  * Play a set of animations for clocks
- * @param {Function} setStateFunc - React set state function
- * @return {Promise} Next startDancing method
  */
-const startDancing = (animationTime, prevNumbers, onChange) => {
+const startDancing = (
+  animationTime: number,
+  prevNumbers: Timer,
+  onChange: ({ numbers }: { numbers: Timer }) => void,
+): {
+  promise: Promise<unknown>;
+  cancel: () => void;
+} => {
   const shapeType = getRandowShapeType();
   const isReverse = shapeType === 'SYMMETRICAL';
-  const getReverseShape = () => {
-    const shape = getRandowShape(shapeType);
-
-    return [shape, shape];
-  };
-  const getOtherShape = () => [
-    getRandowShape(shapeType),
-    getRandowShape(shapeType),
+  const timers = [
+    ...(isReverse ? getReverseShape(shapeType) : getOtherShape(shapeType)),
+    getTimeValues(),
   ];
-  const numbersState = [].concat(
-    isReverse ? getReverseShape() : getOtherShape(),
-    [getTimeValues()],
-  );
 
-  let timeout = null;
-  const setStateTimeout = (numbers) => {
+  let timeout: any = null;
+
+  const setStateTimeout = async (numbers: Timer) => {
     const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
     timeout = startimeout(maxAnimationTime);
 
     onChange({ numbers });
-    return timeout.promise.then(() => numbers);
+    await timeout.promise;
+
+    return numbers;
   };
 
   // Sequence of animations
   const sequenceOptions = { animationTime, isReverse };
-  const sequences = computeSequences(
-    numbersState,
-    prevNumbers,
-    sequenceOptions,
+  const sequences = computeSequences(timers, prevNumbers, sequenceOptions);
+  const sequencesPromise = sequences.map((numbers: Timer) => () =>
+    setStateTimeout(numbers),
   );
-  const sequencesPromise = sequences.map((numbers) => () =>
-    setStateTimeout(numbers));
 
   const promise = runSequences(sequencesPromise)
     .then(() => {
@@ -116,12 +127,27 @@ const startDancing = (animationTime, prevNumbers, onChange) => {
 
   return {
     promise,
-    cancel: () => (timeout ? timeout.cancel() : false),
+    cancel: () => {
+      if (timeout) {
+        timeout.cancel();
+      }
+    },
   };
 };
 
-export default class ClockClock24 extends Component {
-  constructor(props) {
+type ClockClock24Props = {
+  animationTime: number;
+  clockSize: number;
+  clockPadding: number;
+};
+
+export default class ClockClock24 extends Component<
+  ClockClock24Props,
+  { numbers: Timer }
+> {
+  timeout?: any;
+
+  constructor(props: ClockClock24Props) {
     super(props);
 
     this.state = {
@@ -132,11 +158,12 @@ export default class ClockClock24 extends Component {
   componentDidMount() {
     const { animationTime } = this.props;
     const { numbers } = this.state;
-    const timeout = nextTime();
 
-    this.timeout = timeout;
-    return timeout.promise.then(() =>
-      startDancing(animationTime, numbers, (state) => this.setState(state)));
+    this.timeout = nextTime();
+
+    return this.timeout.promise.then(() =>
+      startDancing(animationTime, numbers, (state) => this.setState(state)),
+    );
   }
 
   componentWillUnmount() {
@@ -161,16 +188,22 @@ export default class ClockClock24 extends Component {
     const onTestClick = () => {
       this.cancelTimeout();
       this.timeout = startDancing(animationTime, numbers, (state) =>
-        this.setState(state));
+        this.setState(state),
+      );
       return true;
     };
 
     return (
       <div className="clockclock24_container">
-        {ButtonTest(onTestClick)}
+        {<ButtonTest onClick={onTestClick} />}
         <div className="clockclock24" style={clockStyle}>
-          {numbers.map((number) =>
-            Number(number, { clockSize, defaultAnimationTime: animationTime }))}
+          {numbers.map((number, index) => (
+            <Number
+              key={index}
+              numberLines={number}
+              options={{ clockSize, defaultAnimationTime: animationTime }}
+            />
+          ))}
         </div>
       </div>
     );

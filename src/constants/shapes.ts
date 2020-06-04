@@ -1,24 +1,25 @@
+import { Number, Timer } from '../types';
 import utils from './utils';
 
-const ALL_OBLIQUES = [
+const ALL_OBLIQUES: Number = [
   // OBLIQUE
   [utils.OBLIQUE_LINE, utils.OBLIQUE_LINE],
   [utils.OBLIQUE_LINE, utils.OBLIQUE_LINE],
   [utils.OBLIQUE_LINE, utils.OBLIQUE_LINE],
 ];
-const ALL_DEACTIVATE = [
+const ALL_DEACTIVATE: Number = [
   [utils.DEACTIVATE_BOTTOM_LEFT, utils.DEACTIVATE_BOTTOM_LEFT],
   [utils.DEACTIVATE_BOTTOM_LEFT, utils.DEACTIVATE_BOTTOM_LEFT],
   [utils.DEACTIVATE_BOTTOM_LEFT, utils.DEACTIVATE_BOTTOM_LEFT],
 ];
-const OBLIQUES = [ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES];
-const DEACTIVATE = [
+const OBLIQUES: Timer = [ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES];
+const DEACTIVATE: Timer = [
   ALL_DEACTIVATE,
   ALL_DEACTIVATE,
   ALL_DEACTIVATE,
   ALL_DEACTIVATE,
 ];
-const WIND = [
+const WIND: Timer = [
   [
     [
       { hours: 95, minutes: 95 },
@@ -76,7 +77,7 @@ const WIND = [
     ],
   ],
 ];
-const SQUARES = [
+const SQUARES: Timer = [
   [
     [
       { hours: 225, minutes: 225 },
@@ -134,7 +135,7 @@ const SQUARES = [
     ],
   ],
 ];
-const SYMMETRICAL_1 = [
+const SYMMETRICAL_1: Timer = [
   [
     [
       { hours: 270, minutes: 270 },
@@ -192,7 +193,7 @@ const SYMMETRICAL_1 = [
     ],
   ],
 ];
-const SYMMETRICAL_2 = [
+const SYMMETRICAL_2: Timer = [
   [
     [
       { hours: 135, minutes: 135 },
@@ -251,10 +252,12 @@ const SYMMETRICAL_2 = [
   ],
 ];
 
-const LINEAR = [OBLIQUES, WIND, DEACTIVATE];
-const SYMMETRICAL = [SQUARES, SYMMETRICAL_1, SYMMETRICAL_2];
+const LINEAR: Timer[] = [OBLIQUES, WIND, DEACTIVATE];
+const SYMMETRICAL: Timer[] = [SQUARES, SYMMETRICAL_1, SYMMETRICAL_2];
 
+
+export type ShapeType =  'LINEAR' | 'SYMMETRICAL';
 export default {
   LINEAR,
   SYMMETRICAL,
-};
+} as Record<ShapeType, Timer[]>;
