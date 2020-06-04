@@ -1,4 +1,6 @@
 import React from 'react';
+import { AnimationType } from '../../types';
+
 import './clock.css';
 
 import Needle from '../Needle/Needle';
@@ -11,7 +13,17 @@ const ANIMATION_TIMING_CONFIG = {
   end: ANIMATION_END_TIMING,
 };
 
-const Clock = ({
+const isDefined = (val: number | undefined) => (undefined !== val);
+
+const Clock: React.FC<{
+  hours: number,
+  minutes: number,
+  size: number,
+  animationTime?: number,
+  defaultAnimationTime?: number,
+  animationDelay?: number,
+  animationType?: AnimationType,
+}> = ({
   hours,
   minutes,
   size,
@@ -24,12 +36,11 @@ const Clock = ({
     width: size,
     height: size,
   };
-  const isDefined = (val) => ({}.undef !== val);
   const transitionTime = isDefined(animationTime)
     ? animationTime
     : defaultAnimationTime;
   const transitionDelay = animationDelay || 0;
-  const transitionTiming = ANIMATION_TIMING_CONFIG[animationType]
+  const transitionTiming = animationType && ANIMATION_TIMING_CONFIG[animationType]
     ? ANIMATION_TIMING_CONFIG[animationType]
     : ANIMATION_DEFAULT_TIMING;
   const transition = `all ${transitionTime}ms ${transitionDelay}ms ${transitionTiming}`;

@@ -1,7 +1,10 @@
 import React from 'react';
 import './needle.css';
 
-const Needle = ({ height, width }) => {
+const Needle: React.FC<{
+  height: number;
+  width: number;
+}> = ({ height, width }) => {
   const style = {
     height,
     width,

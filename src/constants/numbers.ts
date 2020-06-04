@@ -1,6 +1,7 @@
+import { Number } from '../types';
 import utils from './utils';
 
-const NUMBERS = [
+const NUMBERS: Number[] = [
   [
     // 0
     [utils.ANGLE_BOTTOM_RIGHT, utils.ANGLE_BOTTOM_LEFT],

@@ -5,11 +5,11 @@ import './index.css';
 import ClockClock24 from './components/ClockClock24/ClockClock24';
 import config from './config';
 
-const screenClockSize = (
+const screenClockSize: number = (
   document.body.clientWidth / 8 - config.CLOCK_PADDING - 10
 );
 
-const clockSize = (
+const clockSize: number = (
   screenClockSize < config.CLOCK_SIZE ? screenClockSize : config.CLOCK_SIZE
 );
 
