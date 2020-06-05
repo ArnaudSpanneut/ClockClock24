@@ -16,12 +16,14 @@ const updateClocksProperties = (
     numberIndex: number,
   ) => Clock,
 ): Timer =>
-  numbers.map((number, numberIndex) =>
-    number.map((clockLines, clockLinesIndex) =>
-      clockLines.map((clock, clockIndex) =>
-        cb(clock, clockIndex, clockLinesIndex, numberIndex),
-      ) as Line,
-    ) as Number,
+  numbers.map(
+    (number, numberIndex) =>
+      number.map(
+        (clockLines, clockLinesIndex) =>
+          clockLines.map((clock, clockIndex) =>
+            cb(clock, clockIndex, clockLinesIndex, numberIndex),
+          ) as Line,
+      ) as Number,
   ) as Timer;
 
 const computeDelays = (numbers: Timer, animationTime: number, delay = 0) =>
@@ -70,13 +72,14 @@ const computeRotation = (
     },
   );
 };
-export const computeClearRotations = (numbers: Timer) =>
+export const computeClearRotations = (numbers: Timer): Timer =>
   updateClocksProperties(numbers, (clock) => ({
     hours: clock.hours % 360,
     minutes: clock.minutes % 360,
     animationTime: 0,
     animationDelay: 0,
   }));
+
 const computeAnimationTypeByPosition = (
   state: any,
   index: number,
@@ -97,7 +100,10 @@ const computeAnimationTypeByPosition = (
 export function computeSequences(
   sequences: Timer[],
   prevNumbers: Timer,
-  { animationTime, isReverse }: {
+  {
+    animationTime,
+    isReverse,
+  }: {
     animationTime: number;
     isReverse?: boolean;
   } = { animationTime: 0 },

@@ -1,3 +1,4 @@
+import { pipe, flatten, propOr, descend, sort, head } from 'ramda';
 import { Timer, Clock } from './types';
 
 export const startimeout = (
@@ -44,17 +45,17 @@ export const getClockSize = (
     width,
   };
 };
-export const flatArr = (arr: any[][]): any[] =>
-  arr.reduce(
-    (acc, entry) => acc.concat(Array.isArray(entry) ? flatArr(entry) : entry),
-    [],
-  );
-export const findClock = (
-  numbers: Timer,
-  conditionFunc: (a: Clock, b: Clock) => boolean,
-) => flatArr(numbers).sort((a, b) => (conditionFunc(a, b) ? 1 : -1))[0];
+const getAnimTime = (c: Clock): number => propOr(0, 'animationTime')(c);
+const byAnimationTime = descend(getAnimTime);
 
-export const getLastArrItem = <T>(arr: T[]): T => arr[arr.length - 1];
+export const getMaxAnimationTime = (timer: Timer) => pipe(
+  // @ts-ignore
+  flatten,
+  sort(byAnimationTime),
+  head,
+  getAnimTime,
+// @ts-ignore
+)(timer);
 
 export const getRandomNumber = (max: number, min = 1): number =>
   Math.floor(Math.random() * (max + min));
