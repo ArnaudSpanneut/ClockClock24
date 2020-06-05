@@ -5,21 +5,21 @@ import { Timer } from '../../types';
 
 import './clockClock24.css';
 
-import NUMBERS from '../../constants/numbers';
-import SHAPES, { ShapeType } from '../../constants/shapes';
-
 import {
   startimeout,
   runSequences,
-  getArrTime,
   getClockSize,
   getMaxAnimationTime,
-  getRandomNumber,
+  getRandomBoolean,
 } from '../../utils';
 import {
   computeSequences,
   computeClearRotations,
 } from '../../services/clockclock';
+import {
+  getTimers,
+  getTimeTimer,
+} from '../../services/timers';
 
 import Number from './Number';
 import ButtonTest from './ButtonTest';
@@ -27,25 +27,6 @@ import ButtonTest from './ButtonTest';
 const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60000;
 
-/**
- * Get the clocks config depends of the number
- * @return Clocks config
- */
-const getTimeValues = (): any => getArrTime().map((nb) => NUMBERS[nb]);
-/**
- * Get a random set of configuration to display forms
- * @return Clocks config
- */
-const getRandowShape = (type: ShapeType) => {
-  const shapes = SHAPES[type];
-  const randomIndex = getRandomNumber(shapes.length - 1);
-  return shapes[randomIndex];
-};
-const getRandowShapeType = (): ShapeType => {
-  const shapesTypes = Object.keys(SHAPES) as ShapeType[];
-  const randomIndex = getRandomNumber(shapesTypes.length - 1);
-  return shapesTypes[randomIndex];
-};
 /**
  * Get the remaining time before the time change
  * @return {Number} Remaining time
@@ -59,16 +40,6 @@ const getRemainingTime = (): number => {
  * @return Remaining time
  */
 const nextTime = () => startimeout(getRemainingTime());
-
-const getReverseShape = (shapeType: ShapeType): Timer[] => {
-  const shape = getRandowShape(shapeType);
-
-  return [shape, shape];
-};
-const getOtherShape = (shapeType: ShapeType) => [
-  getRandowShape(shapeType),
-  getRandowShape(shapeType),
-];
 /**
  * Play a set of animations for clocks
  */
@@ -80,12 +51,7 @@ const startDancing = (
   promise: Promise<Timer>;
   cancel: () => void;
 } => {
-  const shapeType = getRandowShapeType();
-  const isReverse = shapeType === 'SYMMETRICAL';
-  const timers = [
-    ...(isReverse ? getReverseShape(shapeType) : getOtherShape(shapeType)),
-    getTimeValues(),
-  ];
+  const timers = getTimers();
 
   let timeout: any = null;
 
@@ -100,7 +66,7 @@ const startDancing = (
   };
 
   // Sequence of animations
-  const sequenceOptions = { animationTime, isReverse };
+  const sequenceOptions = { animationTime, isReverse: getRandomBoolean() };
   const sequences = computeSequences(timers, prevNumbers, sequenceOptions);
   const sequencesPromise = sequences.map((numbers: Timer) => () =>
     setStateTimeout(numbers),
@@ -150,7 +116,7 @@ export default class ClockClock24 extends Component<
     super(props);
 
     this.state = {
-      numbers: getTimeValues(),
+      numbers: getTimeTimer(),
     };
   }
 
