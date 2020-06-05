@@ -21,12 +21,6 @@ export const startimeout = (
 export const runSequences = (arr: any[]): Promise<unknown> =>
   arr.reduce((promise, func) => promise.then(func), Promise.resolve());
 
-export const getArrTime = (): number[] => {
-  const time = new Date(Date.now());
-  const timeToString = time.toTimeString().replace(':', '').slice(0, 4);
-
-  return timeToString.split('').map((s) => parseInt(s, 10));
-};
 export const getClockSize = (
   clockSize: number,
   clockPadding: number,
@@ -48,14 +42,18 @@ export const getClockSize = (
 const getAnimTime = (c: Clock): number => propOr(0, 'animationTime')(c);
 const byAnimationTime = descend(getAnimTime);
 
-export const getMaxAnimationTime = (timer: Timer) => pipe(
-  // @ts-ignore
-  flatten,
-  sort(byAnimationTime),
-  head,
-  getAnimTime,
-// @ts-ignore
-)(timer);
+export const getMaxAnimationTime = (timer: Timer) =>
+  pipe(
+    // @ts-ignore
+    flatten,
+    sort(byAnimationTime),
+    head,
+    getAnimTime,
+    // @ts-ignore
+  )(timer);
 
 export const getRandomNumber = (max: number, min = 1): number =>
   Math.floor(Math.random() * (max + min));
+
+export const getRandomBoolean = (): boolean =>
+  Boolean(Math.round(Math.random()));
