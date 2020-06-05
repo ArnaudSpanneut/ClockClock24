@@ -1,3 +1,4 @@
+import {last} from 'ramda';
 import React, { Component } from 'react';
 
 import { Timer } from '../../types';
@@ -12,8 +13,7 @@ import {
   runSequences,
   getArrTime,
   getClockSize,
-  findClock,
-  getLastArrItem,
+  getMaxAnimationTime,
   getRandomNumber,
 } from '../../utils';
 import {
@@ -54,12 +54,6 @@ const getRemainingTime = (): number => {
   const secondsInMilli = new Date().getSeconds() * ONE_MILLI;
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
 };
-const getMaxAnimationTime = (numbers: Timer) =>
-  findClock(
-    numbers,
-    // @ts-ignore
-    (a: Clock, b: Clock) => a.animationTime < b.animationTime,
-  ).animationTime;
 /**
  * Waiting for the next minute
  * @return Remaining time
@@ -83,7 +77,7 @@ const startDancing = (
   prevNumbers: Timer,
   onChange: ({ numbers }: { numbers: Timer }) => void,
 ): {
-  promise: Promise<unknown>;
+  promise: Promise<Timer>;
   cancel: () => void;
 } => {
   const shapeType = getRandowShapeType();
@@ -114,7 +108,12 @@ const startDancing = (
 
   const promise = runSequences(sequencesPromise)
     .then(() => {
-      const cleanNumbers = computeClearRotations(getLastArrItem(sequences));
+      const lastNumbers = last(sequences);
+      if(!lastNumbers) {
+        return false;
+      }
+
+      const cleanNumbers = computeClearRotations(lastNumbers);
       onChange({ numbers: cleanNumbers });
 
       timeout = nextTime();
