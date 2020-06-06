@@ -1,4 +1,6 @@
+import { last } from 'ramda';
 import { Timer, Clock, AnimationType, Line, Number } from '../types';
+import { getRandomBoolean } from '../utils';
 
 const ANIMATION_DELAY = 300;
 
@@ -86,53 +88,44 @@ export const resetTimer = (numbers: Timer): Timer =>
   updateClocksProperties(numbers, resetClock);
 
 const computeAnimationTypeByPosition = (
-  state: any,
+  timer: Timer,
   index: number,
-  nbState: number,
-) => {
+  nbTimers: number,
+): Timer => {
   if (index === 0) {
-    return computeAnimationType(state, 'start');
+    return computeAnimationType(timer, 'start');
   }
-  if (index === nbState - 1) {
-    return computeAnimationType(state, 'end');
+  if (index === nbTimers - 1) {
+    return computeAnimationType(timer, 'end');
   }
-  return state;
+  return timer;
 };
 
 /**
  * Apply the sequences values
  */
 export function computeSequences(
-  sequences: Timer[],
-  prevNumbers: Timer,
-  {
-    animationTime,
-    isReverse,
-  }: {
-    animationTime: number;
-    isReverse?: boolean;
-  } = { animationTime: 0 },
+  timers: Timer[],
+  prevTimer: Timer,
+  { animationTime = 0 },
 ) {
-  const rotationsState = sequences.reduce(
-    (acc: Timer[], arr: Timer, index: number) => {
-      const prev = acc[index - 1] || prevNumbers;
-      const rotationOptions = {
-        isMinutesReversed: isReverse,
-      };
-
-      return acc.concat([computeRotation(arr, prev, rotationOptions)]);
-    },
-    [],
-  );
+  const isReverse = getRandomBoolean();
+  const rotationsState = timers.reduce((acc: Timer[], arr: Timer) => [
+    ...acc,
+    computeRotation(arr, last(acc) || prevTimer, {
+      isMinutesReversed: isReverse,
+    }),
+  ], []);
 
   return rotationsState.map((state: any, index: number) => {
-    const animationDelay = index === 0 ? ANIMATION_DELAY : 0;
-    const nextState = computeAnimationTypeByPosition(
+    const hasDelay = getRandomBoolean();
+    const animationDelay = hasDelay && index === 0 ? ANIMATION_DELAY : 0;
+    const nextTimerState = computeAnimationTypeByPosition(
       state,
       index,
       rotationsState.length,
     );
 
-    return computeDelays(nextState, animationTime, animationDelay);
+    return computeDelays(nextTimerState, animationTime, animationDelay);
   });
 }
