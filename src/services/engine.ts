@@ -2,10 +2,10 @@ import { Timer, Clock, AnimationType, Line, Number } from '../types';
 
 const ANIMATION_DELAY = 300;
 
-const calculRotation = (start: number, end: number) =>
+export const rotate = (start: number, end: number) =>
   start + (360 - ((start % 360) - end));
-const calculReverseRotation = (start: number, end: number) =>
-  start + ((end - (start + 360)) % 360) - 360;
+export const rotateReverse = (start: number, end: number) =>
+  start + (end - (start % 360)) - 360;
 
 const updateClocksProperties = (
   numbers: Timer,
@@ -26,7 +26,11 @@ const updateClocksProperties = (
       ) as Number,
   ) as Timer;
 
-const computeDelays = (numbers: Timer, animationTime: number, delay = 0) =>
+export const computeDelays = (
+  numbers: Timer,
+  animationTime: number,
+  delay = 0,
+) =>
   updateClocksProperties(
     numbers,
     (clock, clockIndex, clockLinesIndex, numberIndex) => {
@@ -43,15 +47,16 @@ const computeAnimationType = (numbers: Timer, animationType: AnimationType) =>
     ...clock,
     animationType,
   }));
-const computeRotation = (
+export const computeRotation = (
   numbers: Timer,
   prevNumbers: Timer,
-  options: {
+  {
+    isMinutesReversed,
+  }: {
     isMinutesReversed?: boolean;
   } = {},
-) => {
-  const { isMinutesReversed } = options;
-  return updateClocksProperties(
+) =>
+  updateClocksProperties(
     numbers,
     (
       clock: Clock,
@@ -64,21 +69,21 @@ const computeRotation = (
       ];
       return {
         ...clock,
-        hours: calculRotation(hours, clock.hours),
+        hours: rotate(hours, clock.hours),
         minutes: isMinutesReversed
-          ? calculReverseRotation(minutes, clock.minutes)
-          : calculRotation(minutes, clock.minutes),
+          ? rotateReverse(minutes, clock.minutes)
+          : rotate(minutes, clock.minutes),
       };
     },
   );
-};
-export const computeClearRotations = (numbers: Timer): Timer =>
-  updateClocksProperties(numbers, (clock) => ({
-    hours: clock.hours % 360,
-    minutes: clock.minutes % 360,
-    animationTime: 0,
-    animationDelay: 0,
-  }));
+export const resetClock = ({ hours, minutes }: Clock): Clock => ({
+  hours: hours % 360,
+  minutes: minutes % 360,
+  animationTime: 0,
+  animationDelay: 0,
+});
+export const resetTimer = (numbers: Timer): Timer =>
+  updateClocksProperties(numbers, resetClock);
 
 const computeAnimationTypeByPosition = (
   state: any,
