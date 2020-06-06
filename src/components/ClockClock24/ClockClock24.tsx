@@ -13,8 +13,8 @@ import {
 } from '../../utils';
 import {
   computeSequences,
-  computeClearRotations,
-} from '../../services/clockclock';
+  resetTimer,
+} from '../../services/engine';
 import { getTimers, getTimeTimer } from '../../services/timers';
 
 import { Number } from './../Number/Number';
@@ -75,7 +75,7 @@ const startDancing = (
         return false;
       }
 
-      const cleanNumbers = computeClearRotations(lastNumbers);
+      const cleanNumbers = resetTimer(lastNumbers);
       onChange({ numbers: cleanNumbers });
 
       timeout = nextTime();
