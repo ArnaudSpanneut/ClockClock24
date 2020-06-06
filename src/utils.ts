@@ -21,24 +21,6 @@ export const startimeout = (
 export const runSequences = (arr: any[]): Promise<unknown> =>
   arr.reduce((promise, func) => promise.then(func), Promise.resolve());
 
-export const getClockSize = (
-  clockSize: number,
-  clockPadding: number,
-): {
-  height: number;
-  width: number;
-} => {
-  const totalClockSize = clockSize + clockPadding * 2;
-  const NB_LINES = 3;
-  const NB_COLUMNS = 8;
-  const height = totalClockSize * NB_LINES;
-  const width = totalClockSize * NB_COLUMNS;
-
-  return {
-    height,
-    width,
-  };
-};
 const getAnimTime = (c: Clock): number => propOr(0, 'animationTime')(c);
 const byAnimationTime = descend(getAnimTime);
 

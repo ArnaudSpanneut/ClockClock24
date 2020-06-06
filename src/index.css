@@ -1,5 +1,6 @@
 :root {
-  --clock-backgound-color: #1d1915;
+  --clock-backgound-color: #141414;
+  --needle_background_color: #C9C9C9;
   --clock-padding: 30px;
   --clock-phone-padding: 10px;
   --clock-small-padding: 3px;
@@ -8,13 +9,9 @@
 html {
   background-color: #fff;
 }
-.container {
+.clockclock24 {
   position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

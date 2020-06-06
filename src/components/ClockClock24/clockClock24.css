@@ -1,26 +1,29 @@
 .clockclock24_test_button {
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  background: var(--clock-backgound-color);
-  color: #fff;
+  position: absolute;
+  bottom: var(--clock-phone-padding);
+  right: var(--clock-phone-padding);
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+  background: #232323;
+  border-radius: 50%;
   outline: inherit;
   border: none;
-  border-radius: 3px;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 20px;
   font-weight: 600;
-  font-family: Helvetica, sans-serif;
+  text-align: center;
 }
 .clockclock24 {
   display: flex;
   padding: var(--clock-padding);
   background-color: var(--clock-backgound-color);
+  background-image: radial-gradient(
+    ellipse,
+    #232323 0%,
+    var(--clock-backgound-color) 60%
+  );
   box-shadow: 0px -2px 17px 5px rgba(0, 0, 0, 0.15);
-}
-@media screen and (max-width: 680px) {
-  .clockclock24 {
-    padding: var(--clock-phone-padding);
-  }
 }
 .clockclock24_number {
   flex: 1;
@@ -32,4 +35,13 @@
 .clockclock24_number_line_clock {
   flex: 1;
   padding: var(--clock-small-padding);
+}
+
+@media screen and (max-width: 1100px) {
+  html {
+    background-color: var(--clock-backgound-color);
+  }
+  .clockclock24 {
+    padding: var(--clock-phone-padding);
+  }
 }

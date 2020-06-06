@@ -1,7 +1,3 @@
-:root {
-  --needle_background_color: #ededed;
-}
-
 .needle {
   background-color: var(--needle_background_color);
   box-shadow: inset 1px 0px 0px 0px rgba(0, 0, 0, 0.4);

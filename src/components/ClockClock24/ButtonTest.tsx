@@ -7,16 +7,14 @@ const ButtonTest: React.FC<{
   onClick: () => void
 }> = ({onClick}) => {
   return (
-    <button
+    <div
       className="clockclock24_test_button"
-      type="button"
       onClick={() => onClick()}
     >
-      Dance&nbsp;
       <span role="img" aria-label="dance">
         💃
       </span>
-    </button>
+    </div>
   );
 }
 export default ButtonTest;

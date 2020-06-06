@@ -45,7 +45,7 @@ const Clock: React.FC<{
     : ANIMATION_DEFAULT_TIMING;
   const transition = `all ${transitionTime}ms ${transitionDelay}ms ${transitionTiming}`;
 
-  const needleWidth = size / 10;
+  const needleWidth = size / 9;
   const needleHeight = size / 2;
   const style = {
     hours: {

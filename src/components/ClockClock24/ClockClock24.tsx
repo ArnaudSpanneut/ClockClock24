@@ -1,4 +1,4 @@
-import {last} from 'ramda';
+import { last } from 'ramda';
 import React, { Component } from 'react';
 
 import { Timer } from '../../types';
@@ -8,7 +8,6 @@ import './clockClock24.css';
 import {
   startimeout,
   runSequences,
-  getClockSize,
   getMaxAnimationTime,
   getRandomBoolean,
 } from '../../utils';
@@ -16,16 +15,13 @@ import {
   computeSequences,
   computeClearRotations,
 } from '../../services/clockclock';
-import {
-  getTimers,
-  getTimeTimer,
-} from '../../services/timers';
+import { getTimers, getTimeTimer } from '../../services/timers';
 
 import Number from './Number';
 import ButtonTest from './ButtonTest';
 
 const ONE_MILLI = 1000;
-const ONE_MINUTES_IN_MILLI = 60000;
+const ONE_MINUTES_IN_MILLI = 60 * ONE_MILLI;
 
 /**
  * Get the remaining time before the time change
@@ -75,7 +71,7 @@ const startDancing = (
   const promise = runSequences(sequencesPromise)
     .then(() => {
       const lastNumbers = last(sequences);
-      if(!lastNumbers) {
+      if (!lastNumbers) {
         return false;
       }
 
@@ -120,7 +116,7 @@ export default class ClockClock24 extends Component<
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): Promise<void> {
     const { animationTime } = this.props;
     const { numbers } = this.state;
 
@@ -131,11 +127,11 @@ export default class ClockClock24 extends Component<
     );
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.cancelTimeout();
   }
 
-  cancelTimeout() {
+  cancelTimeout(): void {
     if (this.timeout) {
       this.timeout.cancel();
     }
@@ -143,25 +139,18 @@ export default class ClockClock24 extends Component<
 
   render() {
     const { numbers } = this.state;
-    const { clockSize, clockPadding, animationTime } = this.props;
-    const { height, width } = getClockSize(clockSize, clockPadding);
-    const clockStyle = {
-      height,
-      width,
-    };
+    const { clockSize, animationTime } = this.props;
 
-    const onTestClick = () => {
+    const onTestClick = (): void => {
       this.cancelTimeout();
       this.timeout = startDancing(animationTime, numbers, (state) =>
         this.setState(state),
       );
-      return true;
     };
 
     return (
       <div className="clockclock24_container">
-        {<ButtonTest onClick={onTestClick} />}
-        <div className="clockclock24" style={clockStyle}>
+        <div className="clockclock24">
           {numbers.map((number, index) => (
             <Number
               key={index}
@@ -170,6 +159,7 @@ export default class ClockClock24 extends Component<
             />
           ))}
         </div>
+        <ButtonTest onClick={onTestClick} />
       </div>
     );
   }
