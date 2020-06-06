@@ -11,72 +11,61 @@ export const rotateReverse = (start: number, end: number) =>
 
 const updateClocksProperties = (
   numbers: Timer,
-  cb: (
-    clock: Clock,
-    clockIndex: number,
-    clockLinesIndex: number,
-    numberIndex: number,
-  ) => Clock,
+  cb: (clock: Clock, xPos: number, yPos: number) => Clock,
 ): Timer =>
   numbers.map(
     (number, numberIndex) =>
       number.map(
         (clockLines, clockLinesIndex) =>
           clockLines.map((clock, clockIndex) =>
-            cb(clock, clockIndex, clockLinesIndex, numberIndex),
+            cb(clock, numberIndex * 2 + clockIndex, clockLinesIndex),
           ) as Line,
       ) as Number,
   ) as Timer;
 
-export const computeDelays = (
-  numbers: Timer,
+export const setClockDelay = (
+  clock: Clock,
+  xPos: number,
   animationTime: number,
   delay = 0,
-) =>
-  updateClocksProperties(
-    numbers,
-    (clock, clockIndex, clockLinesIndex, numberIndex) => {
-      const clockDelay = (numberIndex * 2 + clockIndex) * delay;
-      return {
-        ...clock,
-        animationTime: animationTime + numbers.length * delay - clockDelay,
-        animationDelay: clockDelay,
-      };
-    },
+) => {
+  const clockDelay = xPos * delay;
+  return {
+    ...clock,
+    animationTime: animationTime + 4 * delay - clockDelay,
+    animationDelay: clockDelay,
+  };
+};
+const computeDelays = (timer: Timer, animationTime: number, delay?: number) =>
+  updateClocksProperties(timer, (c, xPos) =>
+    setClockDelay(c, xPos, animationTime, delay),
   );
 const computeAnimationType = (numbers: Timer, animationType: AnimationType) =>
   updateClocksProperties(numbers, (clock) => ({
     ...clock,
     animationType,
   }));
-export const computeRotation = (
-  numbers: Timer,
-  prevNumbers: Timer,
+
+export const rotateClock = (
+  clock: Clock,
+  { hours: currentHours, minutes: currentMinutes }: Clock,
+  isMinutesReversed = false,
+) => ({
+  ...clock,
+  hours: rotate(currentHours, clock.hours),
+  minutes: isMinutesReversed
+    ? rotateReverse(currentMinutes, clock.minutes)
+    : rotate(currentMinutes, clock.minutes),
+});
+const computeRotation = (
+  timer: Timer,
+  prevTimer: Timer,
   {
-    isMinutesReversed,
-  }: {
-    isMinutesReversed?: boolean;
+    isMinutesReversed = false,
   } = {},
 ) =>
-  updateClocksProperties(
-    numbers,
-    (
-      clock: Clock,
-      clockIndex: number,
-      clockLinesIndex: number,
-      numberIndex: number,
-    ) => {
-      const { hours, minutes } = prevNumbers[numberIndex][clockLinesIndex][
-        clockIndex
-      ];
-      return {
-        ...clock,
-        hours: rotate(hours, clock.hours),
-        minutes: isMinutesReversed
-          ? rotateReverse(minutes, clock.minutes)
-          : rotate(minutes, clock.minutes),
-      };
-    },
+  updateClocksProperties(timer, (c, xPos, yPos) =>
+    rotateClock(c, prevTimer[Math.floor(xPos / 2)][yPos][xPos%2], isMinutesReversed),
   );
 export const resetClock = ({ hours, minutes }: Clock): Clock => ({
   hours: hours % 360,
