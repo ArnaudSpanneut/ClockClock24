@@ -9,7 +9,6 @@ import {
   startimeout,
   runSequences,
   getMaxAnimationTime,
-  getRandomBoolean,
 } from '../../utils';
 import {
   computeSequences,
@@ -41,7 +40,7 @@ const nextTime = () => startimeout(getRemainingTime());
  */
 const startDancing = (
   animationTime: number,
-  prevNumbers: Timer,
+  prevTimer: Timer,
   onChange: ({ numbers }: { numbers: Timer }) => void,
 ): {
   promise: Promise<Timer>;
@@ -62,27 +61,27 @@ const startDancing = (
   };
 
   // Sequence of animations
-  const sequenceOptions = { animationTime, isReverse: getRandomBoolean() };
-  const sequences = computeSequences(timers, prevNumbers, sequenceOptions);
+  const sequenceOptions = { animationTime };
+  const sequences = computeSequences(timers, prevTimer, sequenceOptions);
   const sequencesPromise = sequences.map((numbers: Timer) => () =>
     setStateTimeout(numbers),
   );
 
   const promise = runSequences(sequencesPromise)
     .then(() => {
-      const lastNumbers = last(sequences);
-      if (!lastNumbers) {
+      const lastTimer = last(sequences);
+      if (!lastTimer) {
         return false;
       }
 
-      const cleanNumbers = resetTimer(lastNumbers);
-      onChange({ numbers: cleanNumbers });
+      const clearTimer = resetTimer(lastTimer);
+      onChange({ numbers: clearTimer });
 
       timeout = nextTime();
-      return timeout.promise.then(() => cleanNumbers);
+      return timeout.promise.then(() => clearTimer);
     })
-    .then((lastNumbers) => {
-      timeout = startDancing(animationTime, lastNumbers, onChange);
+    .then((lastTimer) => {
+      timeout = startDancing(animationTime, lastTimer, onChange);
       return timeout.promise;
     });
 
