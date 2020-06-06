@@ -17,8 +17,8 @@ import {
 } from '../../services/clockclock';
 import { getTimers, getTimeTimer } from '../../services/timers';
 
-import Number from './Number';
-import ButtonTest from './ButtonTest';
+import { Number } from './../Number/Number';
+import { ButtonTest } from './ButtonTest';
 
 const ONE_MILLI = 1000;
 const ONE_MINUTES_IN_MILLI = 60 * ONE_MILLI;

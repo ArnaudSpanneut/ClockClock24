@@ -1,14 +1,14 @@
 import React from 'react';
 import { Number as NumberT } from '../../types';
 
-import NumberLines from './NumberLines';
+import { NumberLines } from './NumberLines';
 
 /**
  * The number to display
  * @param {line} numberLines - Set of line to form the number
  * @param {Object} options  - Clocks options
  */
-const Number: React.FC<{
+export const Number: React.FC<{
   numberLines: NumberT;
   options: {
     clockSize: number;
@@ -21,5 +21,3 @@ const Number: React.FC<{
     </div>
   </div>
 );
-
-export default Number;

@@ -1,9 +1,6 @@
 import React from 'react';
 
-/**
- * Button to launch animations
- */
-const ButtonTest: React.FC<{
+export const ButtonTest: React.FC<{
   onClick: () => void
 }> = ({onClick}) => {
   return (
@@ -17,4 +14,3 @@ const ButtonTest: React.FC<{
     </div>
   );
 }
-export default ButtonTest;

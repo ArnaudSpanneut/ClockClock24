@@ -15,7 +15,7 @@ const ANIMATION_TIMING_CONFIG = {
 
 const isDefined = (val: number | undefined) => (undefined !== val);
 
-const Clock: React.FC<{
+export const Clock: React.FC<{
   hours: number,
   minutes: number,
   size: number,
@@ -79,5 +79,3 @@ const Clock: React.FC<{
     </div>
   );
 };
-
-export default Clock;

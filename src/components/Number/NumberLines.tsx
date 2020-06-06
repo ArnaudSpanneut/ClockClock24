@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
 import { Number, Line } from '../../types';
 
-import NumberLineClock from './NumberLineClock';
+import { NumberLineClock } from './NumberLineClock';
 
 /**
  * Display a line of 2 clocks to form a number
  */
-const NumberLines: React.FC<{
+export const NumberLines: React.FC<{
   numberLines: Number;
   options: {
     clockSize: number;
@@ -17,11 +17,13 @@ const NumberLines: React.FC<{
     {numberLines.map((numberLine: Line, index: number) => (
       <div className="clockclock24_number_line" key={index}>
         {numberLine.map((clock, indexC: number) => (
-          <NumberLineClock clock={clock} options={options} key={index + indexC} />
+          <NumberLineClock
+            clock={clock}
+            options={options}
+            key={index + indexC}
+          />
         ))}
       </div>
     ))}
   </div>
 );
-
-export default NumberLines;
