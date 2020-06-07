@@ -29,19 +29,20 @@ export const setClockDelay = (
   animationTime: number,
   delay = 0,
 ) => {
-  const clockDelay = xPos * delay;
+  const animationDelay = xPos * delay;
   return {
     ...clock,
-    animationTime: animationTime + 4 * delay - clockDelay,
-    animationDelay: clockDelay,
+    animationDelay,
+    animationTime: animationTime + 4 * delay - animationDelay,
   };
 };
 const computeDelays = (timer: Timer, animationTime: number, delay?: number) =>
   updateClocksProperties(timer, (c, xPos) =>
     setClockDelay(c, xPos, animationTime, delay),
   );
-const computeAnimationType = (numbers: Timer, animationType: AnimationType) =>
-  updateClocksProperties(numbers, (clock) => ({
+
+const computeAnimationType = (timer: Timer, animationType: AnimationType) =>
+  updateClocksProperties(timer, (clock) => ({
     ...clock,
     animationType,
   }));
@@ -65,8 +66,13 @@ const computeRotation = (
   } = {},
 ) =>
   updateClocksProperties(timer, (c, xPos, yPos) =>
-    rotateClock(c, prevTimer[Math.floor(xPos / 2)][yPos][xPos%2], isMinutesReversed),
+    rotateClock(
+      c,
+      prevTimer[Math.floor(xPos / 2)][yPos][xPos % 2],
+      isMinutesReversed,
+    ),
   );
+
 export const resetClock = ({ hours, minutes }: Clock): Clock => ({
   hours: hours % 360,
   minutes: minutes % 360,
@@ -99,16 +105,20 @@ export function computeSequences(
   { animationTime = 0 },
 ) {
   const isReverse = getRandomBoolean();
-  const rotationsState = timers.reduce((acc: Timer[], arr: Timer) => [
-    ...acc,
-    computeRotation(arr, last(acc) || prevTimer, {
-      isMinutesReversed: isReverse,
-    }),
-  ], []);
+  const hasStartDelay = getRandomBoolean();
+
+  const rotationsState = timers.reduce(
+    (acc: Timer[], arr: Timer) => [
+      ...acc,
+      computeRotation(arr, last(acc) || prevTimer, {
+        isMinutesReversed: isReverse,
+      }),
+    ],
+    [],
+  );
 
   return rotationsState.map((state: any, index: number) => {
-    const hasDelay = getRandomBoolean();
-    const animationDelay = hasDelay && index === 0 ? ANIMATION_DELAY : 0;
+    const animationDelay = hasStartDelay && index === 0 ? ANIMATION_DELAY : 0;
     const nextTimerState = computeAnimationTypeByPosition(
       state,
       index,
