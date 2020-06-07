@@ -20,6 +20,7 @@
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
+    "@types/jest": "^25.2.3",
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.2",
