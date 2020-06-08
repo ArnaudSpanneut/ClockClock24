@@ -11,10 +11,10 @@ import {
   getMaxAnimationTime,
 } from '../../utils';
 import {
-  computeSequences,
+  run,
   resetTimer,
 } from '../../services/engine';
-import { getTimers, getTimeTimer } from '../../services/timers';
+import { getTimeTimer } from '../../services/timers';
 
 import { Number } from './../Number/Number';
 import { ButtonTest } from './ButtonTest';
@@ -46,8 +46,6 @@ const startDancing = (
   promise: Promise<Timer>;
   cancel: () => void;
 } => {
-  const timers = getTimers();
-
   let timeout: any = null;
 
   const setStateTimeout = async (numbers: Timer) => {
@@ -60,9 +58,7 @@ const startDancing = (
     return numbers;
   };
 
-  // Sequence of animations
-  const sequenceOptions = { animationTime };
-  const sequences = computeSequences(timers, prevTimer, sequenceOptions);
+  const sequences = run(prevTimer, { animationTime });
   const sequencesPromise = sequences.map((numbers: Timer) => () =>
     setStateTimeout(numbers),
   );

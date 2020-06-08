@@ -2,7 +2,7 @@ import { Timer } from '../types';
 
 import NUMBERS from '../constants/numbers';
 import SHAPES, { ShapeType } from '../constants/shapes';
-import { getRandomNumber, getRandomBoolean } from '../utils';
+import { getRandomNumber } from '../utils';
 
 const getArrTime = (): number[] => {
   const time = new Date(Date.now());
@@ -17,6 +17,7 @@ const getArrTime = (): number[] => {
  */
 const getRandowShapedTimer = (type: ShapeType): Timer => {
   const shapes = SHAPES[type];
+
   const randomIndex = getRandomNumber(shapes.length - 1);
   return shapes[randomIndex];
 };
@@ -41,9 +42,10 @@ const getDifferentShape = (nb: number, shapeType: ShapeType): Timer[] =>
  */
 export const getTimeTimer = (): any => getArrTime().map((nb) => NUMBERS[nb]);
 
-export const getTimers = (nb = 2): Timer[] => {
-  const isSame = getRandomBoolean();
+export const getTimers = (isSame: boolean, nb = 2): Timer[] => {
   const shapeType = getRandowShapeType();
 
-  return isSame ? getSameShape(nb, shapeType) : getDifferentShape(nb, shapeType);
+  return isSame
+    ? getSameShape(nb, shapeType)
+    : getDifferentShape(nb, shapeType);
 };

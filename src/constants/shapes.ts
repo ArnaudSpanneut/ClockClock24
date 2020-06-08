@@ -12,14 +12,14 @@ const ALL_DEACTIVATE: Number = [
   [utils.DEACTIVATE_BOTTOM_LEFT, utils.DEACTIVATE_BOTTOM_LEFT],
   [utils.DEACTIVATE_BOTTOM_LEFT, utils.DEACTIVATE_BOTTOM_LEFT],
 ];
-const OBLIQUES: Timer = [ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES];
-const DEACTIVATE: Timer = [
+export const OBLIQUES: Timer = [ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES, ALL_OBLIQUES];
+export const DEACTIVATE: Timer = [
   ALL_DEACTIVATE,
   ALL_DEACTIVATE,
   ALL_DEACTIVATE,
   ALL_DEACTIVATE,
 ];
-const WIND: Timer = [
+export const WIND: Timer = [
   [
     [
       { hours: 95, minutes: 95 },
@@ -77,7 +77,7 @@ const WIND: Timer = [
     ],
   ],
 ];
-const SQUARES: Timer = [
+export const SQUARES: Timer = [
   [
     [
       { hours: 225, minutes: 225 },
@@ -135,7 +135,7 @@ const SQUARES: Timer = [
     ],
   ],
 ];
-const SYMMETRICAL_1: Timer = [
+export const SYMMETRICAL_1: Timer = [
   [
     [
       { hours: 270, minutes: 270 },
@@ -193,7 +193,7 @@ const SYMMETRICAL_1: Timer = [
     ],
   ],
 ];
-const SYMMETRICAL_2: Timer = [
+export const SYMMETRICAL_2: Timer = [
   [
     [
       { hours: 135, minutes: 135 },
@@ -252,9 +252,8 @@ const SYMMETRICAL_2: Timer = [
   ],
 ];
 
-const LINEAR: Timer[] = [OBLIQUES, WIND, DEACTIVATE];
-const SYMMETRICAL: Timer[] = [SQUARES, SYMMETRICAL_1, SYMMETRICAL_2];
-
+export const LINEAR: Timer[] = [OBLIQUES, WIND, DEACTIVATE];
+export const SYMMETRICAL: Timer[] = [SQUARES, SYMMETRICAL_1, SYMMETRICAL_2];
 
 export type ShapeType =  'LINEAR' | 'SYMMETRICAL';
 export default {

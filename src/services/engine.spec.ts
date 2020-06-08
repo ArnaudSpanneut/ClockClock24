@@ -1,14 +1,25 @@
+import { getTimers, getTimeTimer } from './timers';
+import { getRandomBoolean } from '../utils';
 import { flatten } from 'ramda';
 import { simpleTimer } from '../../mocks/timers';
 
+jest.mock('./timers');
+jest.mock('../utils');
+
 import {
+  Sequence,
   rotate,
   rotateReverse,
   resetClock,
   rotateClock,
   setClockDelay,
   computeSequences,
+  run,
 } from './engine';
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('#rotate()', () => {
   test('should do a rotation', () => {
@@ -76,13 +87,14 @@ describe('#setClockDelay()', () => {
 
 describe('#computeSequences()', () => {
   test('should compute sequences', () => {
-    const mockRandom = jest.spyOn(Math, 'random');
-    mockRandom.mockImplementation(() => 0);
+    // const { computeSequences } = jest.requireActual('./engine');
 
-    const timers = [simpleTimer(), simpleTimer(), simpleTimer()];
-    const newState = computeSequences(timers, simpleTimer(), {
-      animationTime: 10,
-    });
+    const sequences = [
+      { timer: simpleTimer(), type: 'shape', animationTime: 10 },
+      { timer: simpleTimer(), type: 'shape', animationTime: 10 },
+      { timer: simpleTimer(), type: 'shape', animationTime: 10 },
+    ] as Sequence[];
+    const newState = computeSequences(sequences, simpleTimer());
 
     flatten<any>(newState[0]).forEach((clock) => {
       expect(clock).toEqual({
@@ -111,12 +123,18 @@ describe('#computeSequences()', () => {
       });
     });
   });
-  test('should do a rotation', () => {
-    const mockRandom = jest.spyOn(Math, 'random');
-    mockRandom.mockImplementation(() => 1);
+});
 
-    const timers = [simpleTimer(), simpleTimer()];
-    const newState = computeSequences(timers, simpleTimer(), {});
+describe('#run()', () => {
+  test('should generate timers', () => {
+    (getTimers as jest.Mock).mockReturnValue([simpleTimer()]);
+    (getTimeTimer as jest.Mock).mockReturnValue(simpleTimer());
+    (getRandomBoolean as jest.Mock).mockReturnValue(true);
+
+    const newState = run(simpleTimer(), {});
+
+    expect(getTimers).toHaveBeenCalled();
+    expect(getTimeTimer).toHaveBeenCalled();
 
     expect(newState[0][0][0][0]).toEqual({
       animationDelay: 0,
