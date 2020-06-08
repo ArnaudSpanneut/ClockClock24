@@ -4,7 +4,6 @@ import NUMBERS from '../constants/numbers';
 import SHAPES, { ShapeType } from '../constants/shapes';
 import { getRandomNumber, getRandomBoolean } from '../utils';
 
-
 const getArrTime = (): number[] => {
   const time = new Date(Date.now());
   const timeToString = time.toTimeString().replace(':', '').slice(0, 4);
@@ -27,27 +26,24 @@ const getRandowShapeType = (): ShapeType => {
   const randomIndex = getRandomNumber(shapesTypes.length - 1);
   return shapesTypes[randomIndex];
 };
-const getSameShape = (shapeType: ShapeType): Timer[] => {
+const getSameShape = (nb: number, shapeType: ShapeType): Timer[] => {
   const shape = getRandowShapedTimer(shapeType);
 
-  return [shape, shape];
+  return Array(nb).fill(shape);
 };
-const getDifferentShape = (shapeType: ShapeType): Timer[] => [
-  getRandowShapedTimer(shapeType),
-  getRandowShapedTimer(shapeType),
-];
+const getDifferentShape = (nb: number, shapeType: ShapeType): Timer[] =>
+  Array(nb)
+    .fill(null)
+    .map(() => getRandowShapedTimer(shapeType));
 
 /**
  * Get the current time in a timer type
  */
 export const getTimeTimer = (): any => getArrTime().map((nb) => NUMBERS[nb]);
 
-export const getTimers = () => {
-  const shapeType = getRandowShapeType();
+export const getTimers = (nb = 2): Timer[] => {
   const isSame = getRandomBoolean();
+  const shapeType = getRandowShapeType();
 
-  return [
-    ...(isSame ? getSameShape(shapeType) : getDifferentShape(shapeType)),
-    getTimeTimer(),
-  ];
-}
+  return isSame ? getSameShape(nb, shapeType) : getDifferentShape(nb, shapeType);
+};
