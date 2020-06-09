@@ -23,7 +23,7 @@
     #232323 0%,
     var(--clock-backgound-color) 60%
   );
-  box-shadow: 0px -2px 17px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: -30px -3px 21px 10px rgba(0, 0, 0, 0.15);
 }
 .clockclock24_number {
   flex: 1;

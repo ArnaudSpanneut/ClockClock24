@@ -1,13 +1,13 @@
 :root {
   --clock-backgound-color: #141414;
-  --needle_background_color: #C9C9C9;
+  --needle_background_color: #c9c9c9;
   --clock-padding: 30px;
   --clock-phone-padding: 10px;
   --clock-small-padding: 3px;
 }
 
 html {
-  background-color: #fff;
+  background: linear-gradient(45deg, #a5a5a5, #e8e8e8);
 }
 .clockclock24 {
   position: absolute;
