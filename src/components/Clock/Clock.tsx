@@ -66,12 +66,12 @@ export const Clock: React.FC<{
 
   return (
     <div className="clock" style={clockSizeStyle}>
-      <div className="clock_needle" style={style.hours}>
+      <div className="clock_needle" style={style.minutes}>
         <div className="clock_needleRotate" style={style.needleRotate}>
           <Needle height={needleHeight - 4} width={needleWidth} />
         </div>
       </div>
-      <div className="clock_needle" style={style.minutes}>
+      <div className="clock_needle" style={style.hours}>
         <div className="clock_needleRotate" style={style.needleRotate}>
           <Needle height={needleHeight} width={needleWidth} />
         </div>
