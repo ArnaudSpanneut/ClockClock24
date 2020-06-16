@@ -25,15 +25,26 @@ describe('#rotate()', () => {
   test('should do a rotation', () => {
     expect(rotate(0, 45)).toBe(45 + 360);
     expect(rotate(0, 0)).toBe(360);
-    expect(rotate(360, 0)).toBe(360 + 360);
+    expect(rotate(360, 0)).toBe(720);
+    expect(rotate(270, 90)).toBe(360 + 90);
+    expect(rotate(540, 180)).toBe(720 + 180);
+    expect(rotate(0, 360)).toBe(360);
+    expect(rotate(360, 180)).toBe(540);
+    expect(rotate(-45, 180)).toBe(180);
+    expect(rotate(-360, 180)).toBe(-180);
   });
 });
-
 describe('#rotateReverse()', () => {
   test('should do a reverse rotation', () => {
-    expect(rotateReverse(0, 90)).toBe(-270);
-    expect(rotateReverse(0, 0)).toBe(-360);
-    expect(rotateReverse(360, 0)).toBe(0);
+    expect(rotateReverse(-180, 180)).toBe(-540);
+    expect(rotateReverse(-45, 135)).toBe(-225);
+    expect(rotateReverse(-135, 225)).toBe(-495);
+    expect(rotateReverse(135, 90)).toBe(-270);
+    expect(rotateReverse(360, 360)).toBe(0);
+    expect(rotateReverse(0, 360)).toBe(-360);
+    expect(rotateReverse(270, 90)).toBe(90);
+    expect(rotateReverse(360, 180)).toBe(180);
+    expect(rotateReverse(-360, 0)).toBe(-720);
   });
 });
 
@@ -55,7 +66,7 @@ describe('#rotateClock()', () => {
     const state = { hours: 360, minutes: 90, animationTime: 10 };
     const newState = rotateClock(state, { hours: 0, minutes: 30 });
     expect(newState).toEqual({
-      hours: 720,
+      hours: 360,
       minutes: 450,
       animationTime: 10,
     });
@@ -127,7 +138,7 @@ describe('#computeSequences()', () => {
 
 describe('#run()', () => {
   test('should generate timers', () => {
-    (getTimers as jest.Mock).mockReturnValue([simpleTimer()]);
+    (getTimers as jest.Mock).mockReturnValue([simpleTimer(), simpleTimer()]);
     (getTimeTimer as jest.Mock).mockReturnValue(simpleTimer());
     (getRandomBoolean as jest.Mock).mockReturnValue(true);
 
@@ -149,6 +160,37 @@ describe('#run()', () => {
       animationType: 'start',
       hours: 360,
       minutes: -360,
+    });
+    expect(newState[1][0][0][0]).toEqual({
+      animationDelay: 0,
+      animationTime: 0,
+      hours: 720,
+      minutes: -720,
+    });
+  });
+  test('should generate timers', () => {
+    (getTimers as jest.Mock).mockReturnValue([simpleTimer()]);
+    (getTimeTimer as jest.Mock).mockReturnValue(simpleTimer());
+    (getRandomBoolean as jest.Mock).mockReturnValue(false);
+
+    const newState = run(simpleTimer(), {});
+
+    expect(getTimers).toHaveBeenCalled();
+    expect(getTimeTimer).toHaveBeenCalled();
+
+    expect(newState[0][0][0][0]).toEqual({
+      animationDelay: 0,
+      animationTime: 0,
+      animationType: 'start',
+      hours: 360,
+      minutes: 360,
+    });
+    expect(newState[0][0][0][1]).toEqual({
+      animationDelay: 0,
+      animationTime: 0,
+      animationType: 'start',
+      hours: 360,
+      minutes: 360,
     });
   });
 });

@@ -5,6 +5,7 @@ import { getTimers, getTimeTimer } from './timers';
 
 const NB_NUMBERS = 4;
 const ANIMATION_DELAY = 300;
+const MIN_ROTATION = 180;
 
 export type Sequence = {
   timer: Timer;
@@ -15,10 +16,21 @@ export type Sequence = {
   isReverse?: boolean;
 };
 
+const isNeg = (nb: number): boolean => Math.sign(nb) === -1;
+const roundRest = (restRotation: number): number => {
+  const restRound = Math.abs(restRotation);
+  const round = restRound >= 360 + MIN_ROTATION ? restRound - 360 : restRound;
+
+  return isNeg(restRotation) ? -round : round;
+};
+const getStartPosition = (start: number): number =>
+  isNeg(start) ? 360 + (start % 360) : start % 360;
+const getMinValue = (rest: number): number => (rest === 0 ? 360 : rest);
+
 export const rotate = (start: number, end: number) =>
-  start + (360 - ((start % 360) - end));
+  start + roundRest(360 - (getStartPosition(start) - end));
 export const rotateReverse = (start: number, end: number) =>
-  start + (end - (start % 360)) - 360;
+  start + roundRest(-getMinValue(getStartPosition(start)) + (end - 360));
 
 const updateClocksProperties = (
   numbers: Timer,
@@ -123,7 +135,8 @@ const computeTimer = (seq: Sequence, curTimer: Timer) => {
 export const computeSequences = (
   sequences: Sequence[],
   lastTimer: Timer,
-): Timer[] => sequences
+): Timer[] =>
+  sequences
     .reduce(
       (acc: Timer[], seq: Sequence) => [
         ...acc,
@@ -135,10 +148,7 @@ export const computeSequences = (
       computeAnimationTypeByPosition(state, index, arr.length),
     );
 
-export const run = (
-  prevTimer: Timer,
-  { animationTime = 0 }
-) => {
+export const run = (prevTimer: Timer, { animationTime = 0 }) => {
   const isReverse = getRandomBoolean();
   const sequences = getTimers(isReverse)
     .map(
@@ -150,7 +160,7 @@ export const run = (
         isReverse,
       }),
     )
-    .concat({ timer: getTimeTimer(), type: 'time', animationTime });
+    .concat({ timer: getTimeTimer(), type: 'time', animationTime, isReverse });
 
   return computeSequences(sequences, prevTimer);
-}
+};
