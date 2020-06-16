@@ -22,11 +22,6 @@ const getRandowShapedTimer = (type: ShapeType): Timer => {
   return shapes[randomIndex];
 };
 
-const getRandowShapeType = (): ShapeType => {
-  const shapesTypes = Object.keys(SHAPES) as ShapeType[];
-  const randomIndex = getRandomNumber(shapesTypes.length - 1);
-  return shapesTypes[randomIndex];
-};
 const getSameShape = (nb: number, shapeType: ShapeType): Timer[] => {
   const shape = getRandowShapedTimer(shapeType);
 
@@ -43,7 +38,7 @@ const getDifferentShape = (nb: number, shapeType: ShapeType): Timer[] =>
 export const getTimeTimer = (): any => getArrTime().map((nb) => NUMBERS[nb]);
 
 export const getTimers = (isSame: boolean, nb = 2): Timer[] => {
-  const shapeType = getRandowShapeType();
+  const shapeType = isSame ? 'SYMMETRICAL' : 'LINEAR';
 
   return isSame
     ? getSameShape(nb, shapeType)
