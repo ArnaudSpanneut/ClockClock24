@@ -1,6 +1,22 @@
 {
-  "main.css": "static/css/main.0674f7cf.css",
-  "main.css.map": "static/css/main.0674f7cf.css.map",
-  "main.js": "static/js/main.f0f73f77.js",
-  "main.js.map": "static/js/main.f0f73f77.js.map"
+  "files": {
+    "main.css": "/ClockClock24/static/css/main.6b4b3593.chunk.css",
+    "main.js": "/ClockClock24/static/js/main.bfa5f8b9.chunk.js",
+    "main.js.map": "/ClockClock24/static/js/main.bfa5f8b9.chunk.js.map",
+    "runtime-main.js": "/ClockClock24/static/js/runtime-main.79fd1b57.js",
+    "runtime-main.js.map": "/ClockClock24/static/js/runtime-main.79fd1b57.js.map",
+    "static/js/2.72ee8c32.chunk.js": "/ClockClock24/static/js/2.72ee8c32.chunk.js",
+    "static/js/2.72ee8c32.chunk.js.map": "/ClockClock24/static/js/2.72ee8c32.chunk.js.map",
+    "index.html": "/ClockClock24/index.html",
+    "precache-manifest.9c744aa0ee0b7a918568fbc60fe426c2.js": "/ClockClock24/precache-manifest.9c744aa0ee0b7a918568fbc60fe426c2.js",
+    "service-worker.js": "/ClockClock24/service-worker.js",
+    "static/css/main.6b4b3593.chunk.css.map": "/ClockClock24/static/css/main.6b4b3593.chunk.css.map",
+    "static/js/2.72ee8c32.chunk.js.LICENSE.txt": "/ClockClock24/static/js/2.72ee8c32.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.79fd1b57.js",
+    "static/js/2.72ee8c32.chunk.js",
+    "static/css/main.6b4b3593.chunk.css",
+    "static/js/main.bfa5f8b9.chunk.js"
+  ]
 }
