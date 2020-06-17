@@ -1,11 +1,35 @@
 # ClockClock24
 
-This project inspired about the amazing clock from MoMA ⏱
+Project inspired from the [ClockClock project](https://clockclock.com/)
 
-You can see the demo [Here](https://arnaudspanneut.github.io/ClockClock24/)
+> ClockClock 24 is both a kinetic sculpture and a functioning clock. Its hands veer from unpredictable, mechanical spinning, to perfect, synchronised alignment; to visually represent the abstract concept of time, and to report real time.
 
-This clock is composed of 24 clocks that indicate the time
+[Buy it on the MoMa Store](https://store.moma.org/home/clocks/clockclock-24-black-edition/125153-125153.html?cgid=home-clocks#start=11)
 
-A video about how it works in real: [Here](https://www.youtube.com/watch?v=oNfs-I4vwbY)
+## 💎 Live demo 
 
-The link to the MoMA store if you want to buy it in real: [Moma Store](https://store.moma.org/home/clocks/clockclock-24-black-edition/125153-125153.html?cgid=home-clocks#start=11)
+[Check it in live !](https://arnaudspanneut.github.io/ClockClock24/)
+
+## 🛠 Technical information
+
+This project has been developed with:
+- [Typescript](https://www.typescriptlang.org/)
+- [React](https://fr.reactjs.org/)
+- [Ramda](https://ramdajs.com/)
+
+## Commands
+
+Run the project
+```sh
+npm start
+```
+
+Build sources
+```sh
+npm build
+```
+
+Run test suite (with coveraging)
+```sh
+npm test
+```
