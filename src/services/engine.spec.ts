@@ -163,6 +163,12 @@ describe('#run()', () => {
     });
     expect(newState[1][0][0][0]).toEqual({
       animationDelay: 0,
+      animationTime: 3000,
+      hours: 360,
+      minutes: -360,
+    });
+    expect(newState[2][0][0][0]).toEqual({
+      animationDelay: 0,
       animationTime: 0,
       hours: 720,
       minutes: -720,
