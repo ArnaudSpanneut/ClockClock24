@@ -10,7 +10,6 @@ export const NumberLines: React.FC<{
   numberLines: Number;
   options: {
     clockSize: number;
-    defaultAnimationTime: number;
   };
 }> = ({ numberLines, options }): ReactElement => (
   <div>

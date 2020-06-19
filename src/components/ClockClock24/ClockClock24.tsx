@@ -150,7 +150,7 @@ export default class ClockClock24 extends Component<
             <Number
               key={index}
               numberLines={number}
-              options={{ clockSize, defaultAnimationTime: animationTime }}
+              options={{ clockSize }}
             />
           ))}
         </div>

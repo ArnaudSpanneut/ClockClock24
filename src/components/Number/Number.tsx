@@ -12,7 +12,6 @@ export const Number: React.FC<{
   numberLines: NumberT;
   options: {
     clockSize: number;
-    defaultAnimationTime: number;
   };
 }> = ({ numberLines, options }) => (
   <div className="clockclock24_number">

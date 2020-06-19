@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimationType } from '../../types';
+import { Clock as ClockT } from '../../types';
 
 import './clock.css';
 
@@ -13,32 +13,25 @@ const ANIMATION_TIMING_CONFIG = {
   end: ANIMATION_END_TIMING,
 };
 
-const isDefined = (val: number | undefined) => (undefined !== val);
-
 export const Clock: React.FC<{
-  hours: number,
-  minutes: number,
   size: number,
-  animationTime?: number,
-  defaultAnimationTime?: number,
-  animationDelay?: number,
-  animationType?: AnimationType,
+  clock: ClockT,
 }> = ({
-  hours,
-  minutes,
   size,
-  animationTime,
-  defaultAnimationTime,
-  animationDelay,
-  animationType,
+  clock,
 }) => {
+  const {
+    hours,
+    minutes,
+    animationTime,
+    animationDelay,
+    animationType,
+  } = clock;
   const clockSizeStyle = {
     width: size,
     height: size,
   };
-  const transitionTime = isDefined(animationTime)
-    ? animationTime
-    : defaultAnimationTime;
+  const transitionTime = animationTime;
   const transitionDelay = animationDelay || 0;
   const transitionTiming = animationType && ANIMATION_TIMING_CONFIG[animationType]
     ? ANIMATION_TIMING_CONFIG[animationType]
