@@ -124,7 +124,7 @@ const computeAnimationTypeByPosition = (
 
 const computeTimer = (seq: Sequence, curTimer: Timer) => {
   if (seq.type === 'wait') {
-    return computeDelays(seq.timer, seq.animationTime, 0);
+    return computeDelays(curTimer, seq.animationTime, 0);
   }
   const nextTimerState = computeRotation(seq.timer, curTimer, {
     isMinutesReversed: seq.isReverse,
@@ -148,18 +148,29 @@ export const computeSequences = (
       computeAnimationTypeByPosition(state, index, arr.length),
     );
 
+const getWaitSequence = (timer: Timer): Sequence => ({
+  timer,
+  type: 'wait',
+  animationTime: 3000,
+});
 export const run = (prevTimer: Timer, { animationTime = 0 }) => {
   const isReverse = getRandomBoolean();
   const sequences = getTimers(isReverse)
-    .map(
-      (timer: Timer, i): Sequence => ({
-        timer,
-        type: 'shape',
-        animationTime,
-        delay: i === 0 && getRandomBoolean() ? ANIMATION_DELAY : 0,
-        isReverse,
-      }),
-    )
+    .reduce((acc: Sequence[], timer: Timer, index): Sequence[] => {
+      const hasDelay = index === 0 && getRandomBoolean();
+
+      return [
+        ...acc,
+        {
+          timer,
+          type: 'shape',
+          animationTime,
+          delay: index === 0 && getRandomBoolean() ? ANIMATION_DELAY : 0,
+          isReverse,
+        },
+        ...(hasDelay ? [getWaitSequence(timer)] : []),
+      ];
+    }, [])
     .concat({ timer: getTimeTimer(), type: 'time', animationTime, isReverse });
 
   return computeSequences(sequences, prevTimer);
