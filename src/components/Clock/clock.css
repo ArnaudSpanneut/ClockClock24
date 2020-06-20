@@ -7,8 +7,9 @@
 }
 .clock_needle {
   position: absolute;
-  transition-name: transform;
 }
 .clock_needleRotate {
   position: absolute;
+  top: 50%;
+  left: 50%;
 }
