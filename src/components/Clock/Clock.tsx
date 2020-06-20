@@ -52,8 +52,7 @@ export const Clock: React.FC<{
       ...{ transition },
     },
     needleRotate: {
-      top: `calc(50% - ${needleWidth / 2 - 0.5}px)`,
-      left: `calc(50% - ${needleWidth / 2 + 0.5}px)`,
+      transform: `translate(-50%, -${needleWidth / 2}px)`,
     },
   };
 
