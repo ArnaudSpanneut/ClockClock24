@@ -1,12 +1,13 @@
 import { pipe, flatten, propOr, descend, sort, head } from 'ramda';
 import { Timer, Clock } from './types';
 
-export const startimeout = (
-  time: number,
-): {
+export type Timeout = {
   promise: Promise<unknown>;
   cancel: () => void;
-} => {
+}
+export const startimeout = (
+  time: number,
+): Timeout => {
   let cancel = () => {};
   const promise = new Promise((resolve, reject) => {
     const timeout = setTimeout(resolve, time);
@@ -14,6 +15,7 @@ export const startimeout = (
       clearTimeout(timeout);
       reject();
     };
+    return timeout;
   });
 
   return { promise, cancel };
