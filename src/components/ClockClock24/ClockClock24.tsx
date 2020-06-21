@@ -9,11 +9,9 @@ import {
   startimeout,
   runSequences,
   getMaxAnimationTime,
+  Timeout,
 } from '../../utils';
-import {
-  run,
-  resetTimer,
-} from '../../services/engine';
+import { run, resetTimer } from '../../services/engine';
 import { getTimeTimer } from '../../services/timers';
 
 import { Number } from './../Number/Number';
@@ -24,71 +22,11 @@ const ONE_MINUTES_IN_MILLI = 60 * ONE_MILLI;
 
 /**
  * Get the remaining time before the time change
- * @return {Number} Remaining time
+ * @return Remaining time
  */
 const getRemainingTime = (): number => {
   const secondsInMilli = new Date().getSeconds() * ONE_MILLI;
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
-};
-/**
- * Waiting for the next minute
- * @return Remaining time
- */
-const nextTime = () => startimeout(getRemainingTime());
-/**
- * Play a set of animations for clocks
- */
-const startDancing = (
-  animationTime: number,
-  prevTimer: Timer,
-  onChange: ({ numbers }: { numbers: Timer }) => void,
-): {
-  promise: Promise<Timer>;
-  cancel: () => void;
-} => {
-  let timeout: any = null;
-
-  const setStateTimeout = async (numbers: Timer) => {
-    const maxAnimationTime = getMaxAnimationTime(numbers) || animationTime;
-    timeout = startimeout(maxAnimationTime);
-
-    onChange({ numbers });
-    await timeout.promise;
-
-    return numbers;
-  };
-
-  const sequences = run(prevTimer, { animationTime });
-  const sequencesPromise = sequences.map((numbers: Timer) => () =>
-    setStateTimeout(numbers),
-  );
-
-  const promise = runSequences(sequencesPromise)
-    .then(() => {
-      const lastTimer = last(sequences);
-      if (!lastTimer) {
-        return false;
-      }
-
-      const clearTimer = resetTimer(lastTimer);
-      onChange({ numbers: clearTimer });
-
-      timeout = nextTime();
-      return timeout.promise.then(() => clearTimer);
-    })
-    .then((lastTimer) => {
-      timeout = startDancing(animationTime, lastTimer, onChange);
-      return timeout.promise;
-    });
-
-  return {
-    promise,
-    cancel: () => {
-      if (timeout) {
-        timeout.cancel();
-      }
-    },
-  };
 };
 
 type ClockClock24Props = {
@@ -96,34 +34,65 @@ type ClockClock24Props = {
   clockSize: number;
   clockPadding: number;
 };
+type ClockClock24State = { timer: Timer };
 
 export default class ClockClock24 extends Component<
   ClockClock24Props,
-  { numbers: Timer }
+  ClockClock24State
 > {
-  timeout?: any;
+  private timeout?: Timeout;
+  state: ClockClock24State = {
+    timer: getTimeTimer(),
+  };
 
-  constructor(props: ClockClock24Props) {
-    super(props);
-
-    this.state = {
-      numbers: getTimeTimer(),
-    };
-  }
-
-  componentDidMount(): Promise<void> {
-    const { animationTime } = this.props;
-    const { numbers } = this.state;
-
-    this.timeout = nextTime();
-
-    return this.timeout.promise.then(() =>
-      startDancing(animationTime, numbers, (state) => this.setState(state)),
-    );
+  componentDidMount(): void {
+    this.startNextCycle(1000);
   }
 
   componentWillUnmount(): void {
     this.cancelTimeout();
+  }
+
+  startNextCycle(time: number) {
+    this.timeout = startimeout(time);
+
+    this.timeout.promise.then(() => this.startCycle());
+  }
+
+  animateTimer(timer: Timer): Promise<unknown> {
+    const animationTime = getMaxAnimationTime(timer);
+
+    this.setState({ timer });
+    this.timeout = startimeout(animationTime);
+
+    return this.timeout.promise;
+  }
+
+  startCycle(): void {
+    const { animationTime } = this.props;
+
+    this.cancelTimeout();
+
+    const sequences = run(this.state.timer, { animationTime });
+    const sequencesPromise = sequences.map((timer: Timer) => () =>
+      this.animateTimer(timer),
+    );
+
+    runSequences(sequencesPromise).then(() => {
+      const lastTimer = last(sequences);
+      if (!lastTimer) {
+        return null;
+      }
+
+      const clearTimer = resetTimer(lastTimer);
+      this.setState({ timer: clearTimer });
+
+      return this.nextTime();
+    });
+  }
+
+  nextTime(): void {
+    this.startNextCycle(getRemainingTime());
   }
 
   cancelTimeout(): void {
@@ -132,29 +101,22 @@ export default class ClockClock24 extends Component<
     }
   }
 
-  render() {
-    const { numbers } = this.state;
-    const { clockSize, animationTime } = this.props;
+  onAnimateClick(): void {
+    this.startCycle();
+  }
 
-    const onTestClick = (): void => {
-      this.cancelTimeout();
-      this.timeout = startDancing(animationTime, numbers, (state) =>
-        this.setState(state),
-      );
-    };
+  render() {
+    const { timer } = this.state;
+    const { clockSize } = this.props;
 
     return (
       <div className="clockclock24_container">
         <div className="clockclock24">
-          {numbers.map((number, index) => (
-            <Number
-              key={index}
-              numberLines={number}
-              options={{ clockSize }}
-            />
+          {timer.map((number, index) => (
+            <Number key={index} numberLines={number} options={{ clockSize }} />
           ))}
         </div>
-        <ButtonTest onClick={onTestClick} />
+        <ButtonTest onClick={() => this.onAnimateClick()} />
       </div>
     );
   }

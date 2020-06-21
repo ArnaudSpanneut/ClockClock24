@@ -144,7 +144,7 @@ export const computeSequences = (
       ],
       [],
     )
-    .map((state: any, index: number, arr: Timer[]) =>
+    .map((state: Timer, index: number, arr: Timer[]) =>
       computeAnimationTypeByPosition(state, index, arr.length),
     );
 
