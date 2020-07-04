@@ -1,21 +1,46 @@
 import { pipe, flatten, propOr, descend, sort, head } from 'ramda';
 import { Timer, Clock } from './types';
 
+const noop = () => {};
+const requestTimeout = (
+  fn: Function,
+  delay: number,
+  registerCancel: (cb: () => void) => void,
+) => {
+  const start = new Date().getTime();
+
+  const loop = () => {
+    const delta = new Date().getTime() - start;
+
+    if (delta >= delay) {
+      fn();
+      registerCancel(noop);
+      return;
+    }
+
+    const raf = requestAnimationFrame(loop);
+    registerCancel(() => cancelAnimationFrame(raf));
+  };
+
+  const raf = requestAnimationFrame(loop);
+  registerCancel(() => cancelAnimationFrame(raf));
+};
+
 export type Timeout = {
   promise: Promise<unknown>;
   cancel: () => void;
-}
-export const startimeout = (
-  time: number,
-): Timeout => {
+};
+export const startimeout = (time: number): Timeout => {
   let cancel = () => {};
   const promise = new Promise((resolve, reject) => {
-    const timeout = setTimeout(resolve, time);
+    let timeoutCancel = () => {};
+    requestTimeout(resolve, time, (fn) => {
+      timeoutCancel = fn;
+    });
     cancel = () => {
-      clearTimeout(timeout);
+      timeoutCancel();
       reject();
     };
-    return timeout;
   });
 
   return { promise, cancel };
