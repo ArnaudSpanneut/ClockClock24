@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ClockClock24/static/css/main.f919970c.chunk.css",
-    "main.js": "/ClockClock24/static/js/main.0a67af72.chunk.js",
-    "main.js.map": "/ClockClock24/static/js/main.0a67af72.chunk.js.map",
+    "main.js": "/ClockClock24/static/js/main.cffdffcb.chunk.js",
+    "main.js.map": "/ClockClock24/static/js/main.cffdffcb.chunk.js.map",
     "runtime-main.js": "/ClockClock24/static/js/runtime-main.79fd1b57.js",
     "runtime-main.js.map": "/ClockClock24/static/js/runtime-main.79fd1b57.js.map",
     "static/js/2.3807eb20.chunk.js": "/ClockClock24/static/js/2.3807eb20.chunk.js",
     "static/js/2.3807eb20.chunk.js.map": "/ClockClock24/static/js/2.3807eb20.chunk.js.map",
     "index.html": "/ClockClock24/index.html",
-    "precache-manifest.479de80e6d2a036ac1e68f2676f45b85.js": "/ClockClock24/precache-manifest.479de80e6d2a036ac1e68f2676f45b85.js",
+    "precache-manifest.a33eb9a41df92eca6dd2839884b04684.js": "/ClockClock24/precache-manifest.a33eb9a41df92eca6dd2839884b04684.js",
     "service-worker.js": "/ClockClock24/service-worker.js",
     "static/css/main.f919970c.chunk.css.map": "/ClockClock24/static/css/main.f919970c.chunk.css.map",
     "static/js/2.3807eb20.chunk.js.LICENSE.txt": "/ClockClock24/static/js/2.3807eb20.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.79fd1b57.js",
     "static/js/2.3807eb20.chunk.js",
     "static/css/main.f919970c.chunk.css",
-    "static/js/main.0a67af72.chunk.js"
+    "static/js/main.cffdffcb.chunk.js"
   ]
 }
