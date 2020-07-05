@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "50a021cd878661013bebf1a50ee48d3d",
+    "revision": "111f76d4af969f6848b56918668f8efd",
     "url": "/ClockClock24/index.html"
   },
   {
-    "revision": "5e272bc11edf1c1cab87",
-    "url": "/ClockClock24/static/css/main.f919970c.chunk.css"
+    "revision": "7b6450997491da2d8348",
+    "url": "/ClockClock24/static/css/main.d65376cc.chunk.css"
   },
   {
     "revision": "205f51b6c1938b1e0319",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/ClockClock24/static/js/2.3807eb20.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "5e272bc11edf1c1cab87",
-    "url": "/ClockClock24/static/js/main.cffdffcb.chunk.js"
+    "revision": "7b6450997491da2d8348",
+    "url": "/ClockClock24/static/js/main.f6d11d7f.chunk.js"
   },
   {
     "revision": "1c998f52bb426595c5db",
