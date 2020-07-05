@@ -36,7 +36,7 @@ export const Clock: React.FC<{
   const transitionTiming = animationType && ANIMATION_TIMING_CONFIG[animationType]
     ? ANIMATION_TIMING_CONFIG[animationType]
     : ANIMATION_DEFAULT_TIMING;
-  const transition = `all ${transitionTime}ms ${transitionDelay}ms ${transitionTiming}`;
+  const transition = `transform ${transitionTime}ms ${transitionDelay}ms ${transitionTiming}`;
 
   const needleWidth = size / 9;
   const needleHeight = size / 2;

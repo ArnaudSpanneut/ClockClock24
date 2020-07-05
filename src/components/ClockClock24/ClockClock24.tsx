@@ -2,6 +2,12 @@ import { last } from 'ramda';
 import React, { Component } from 'react';
 
 import { Timer } from '../../types';
+import {
+  NB_COLUMN_CLOCKS,
+  ANIMATION_TIME,
+  CLOCK_PADDING,
+  CLOCK_MAX_SIZE,
+} from '../../config';
 
 import './clockClock24.css';
 
@@ -29,12 +35,25 @@ const getRemainingTime = (): number => {
   return ONE_MINUTES_IN_MILLI - secondsInMilli;
 };
 
-type ClockClock24Props = {
+type ClockClock24Props = {};
+type ClockClock24State = {
+  timer: Timer;
   animationTime: number;
   clockSize: number;
   clockPadding: number;
 };
-type ClockClock24State = { timer: Timer };
+
+const getClockSize = (): number => {
+  const { clientWidth } = document.body;
+  const paddingClock = clientWidth >= 1100 ? 30 : 10;
+  const screenClockSize: number =
+    (document.body.clientWidth -
+      2 * paddingClock -
+      2 * CLOCK_PADDING * NB_COLUMN_CLOCKS) /
+    NB_COLUMN_CLOCKS;
+
+  return screenClockSize < CLOCK_MAX_SIZE ? screenClockSize : CLOCK_MAX_SIZE;
+};
 
 export default class ClockClock24 extends Component<
   ClockClock24Props,
@@ -43,10 +62,17 @@ export default class ClockClock24 extends Component<
   private timeout?: Timeout;
   state: ClockClock24State = {
     timer: getTimeTimer(),
+    clockSize: getClockSize(),
+    clockPadding: CLOCK_PADDING,
+    animationTime: ANIMATION_TIME,
   };
 
   componentDidMount(): void {
     this.startNextCycle(1000);
+
+    window.addEventListener('resize', () => {
+      this.setState({ clockSize: getClockSize() })
+    });
   }
 
   componentWillUnmount(): void {
@@ -69,7 +95,7 @@ export default class ClockClock24 extends Component<
   }
 
   startCycle(): void {
-    const { animationTime } = this.props;
+    const { animationTime } = this.state;
 
     this.cancelTimeout();
 
@@ -106,8 +132,7 @@ export default class ClockClock24 extends Component<
   }
 
   render() {
-    const { timer } = this.state;
-    const { clockSize } = this.props;
+    const { timer, clockSize } = this.state;
 
     return (
       <div className="clockclock24_container">
