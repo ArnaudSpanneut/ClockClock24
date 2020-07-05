@@ -1,5 +1,6 @@
 import { last } from 'ramda';
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 
 import { Timer } from '../../types';
 import {
@@ -71,7 +72,11 @@ export default class ClockClock24 extends Component<
     this.startNextCycle(1000);
 
     window.addEventListener('resize', () => {
-      this.setState({ clockSize: getClockSize() })
+      ReactGA.event({
+        category: 'Window',
+        action: 'Resize',
+      });
+      this.setState({ clockSize: getClockSize() });
     });
   }
 

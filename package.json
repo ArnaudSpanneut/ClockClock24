@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://arnaudspanneut.github.io/ClockClock24/",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "NODE_ENV=development react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --coverage",
     "eject": "react-scripts eject",
@@ -17,7 +17,8 @@
     "@types/react-dom": "^16.9.0",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-ga": "^3.1.1"
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",
