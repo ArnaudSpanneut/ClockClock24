@@ -98,12 +98,10 @@ describe('#setClockDelay()', () => {
 
 describe('#computeSequences()', () => {
   test('should compute sequences', () => {
-    // const { computeSequences } = jest.requireActual('./engine');
-
     const sequences = [
+      { timer: simpleTimer(), type: 'shape', animationTime: 10, animationType: 'start' },
       { timer: simpleTimer(), type: 'shape', animationTime: 10 },
-      { timer: simpleTimer(), type: 'shape', animationTime: 10 },
-      { timer: simpleTimer(), type: 'shape', animationTime: 10 },
+      { timer: simpleTimer(), type: 'shape', animationTime: 10, animationType: 'end' },
     ] as Sequence[];
     const newState = computeSequences(sequences, simpleTimer());
 
@@ -164,12 +162,14 @@ describe('#run()', () => {
     expect(newState[1][0][0][0]).toEqual({
       animationDelay: 0,
       animationTime: 3000,
+      animationType: 'start',
       hours: 360,
       minutes: -360,
     });
     expect(newState[2][0][0][0]).toEqual({
       animationDelay: 0,
       animationTime: 0,
+      animationType: 'start',
       hours: 720,
       minutes: -720,
     });
