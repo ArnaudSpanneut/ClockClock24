@@ -17,8 +17,29 @@ ReactDOM.render(
         🔄
       </span>
     </div>
-    ,
     <ClockClock24 />
+    <p className="global_info">
+      Made with{' '}
+      <span role="img" aria-label="heart">
+        ❤️
+      </span>{' '}
+      by{' '}
+      <a
+        href="http://arnaudspanneut.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Arnaud Spanneut
+      </a>{' '}
+      •{' '}
+      <a
+        href="https://github.com/ArnaudSpanneut/ClockClock24"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Github
+      </a>
+    </p>
   </div>,
   document.getElementById('root'),
 );
